@@ -5,6 +5,15 @@
  * - 이전/다음 글 네비게이션 기능
  * - 작성자 권한에 따른 수정/삭제 버튼 표시
  */
+
+// 정적 생성용 함수
+export async function generateStaticParams() {
+  const { POSTS } = await import('@/lib/data')
+  return POSTS.map((post) => ({
+    id: post.id.toString(),
+  }))
+}
+
 "use client"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
