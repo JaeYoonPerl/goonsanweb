@@ -14,13 +14,17 @@ interface CarouselBannerProps {
 export function CarouselBanner({ setCarouselApi }: CarouselBannerProps) {
   return (
     <section className="bg-primary/5">
-      <div className="container mx-auto px-4 py-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <Carousel opts={{ loop: true }} className="w-full" setApi={setCarouselApi}>
           <CarouselContent>
             {CAROUSEL_IMAGES.map((image, index) => (
               <CarouselItem key={index}>
-                <div className="relative h-[280px] sm:h-[420px] rounded-xl overflow-hidden">
-                  <img src={image.src} alt={image.alt} className="w-full h-full object-cover" />
+                <div className="relative h-[300px] sm:h-[450px] lg:h-[500px] rounded-xl overflow-hidden shadow-lg">
+                  <img 
+                    src={image.src} 
+                    alt={image.alt} 
+                    className="w-full h-full object-cover object-center transition-transform duration-300 hover:scale-105" 
+                  />
                 </div>
               </CarouselItem>
             ))}

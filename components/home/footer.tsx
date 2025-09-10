@@ -3,7 +3,7 @@ import { GraduationCap } from "lucide-react"
 export function Footer() {
   return (
     <footer className="bg-card border-t border-border mt-16">
-      <div className="container mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <div className="flex items-center gap-2 mb-4">
@@ -18,9 +18,9 @@ export function Footer() {
           <div>
             <h4 className="font-semibold text-foreground mb-3">연락처</h4>
             <div className="space-y-1 text-sm text-muted-foreground">
-              <p>전화: 063-XXX-XXXX</p>
+              <p>전화: 063)443-5050</p>
               <p>이메일: alumni@gunsan.hs.kr</p>
-              <p>주소: 전북 군산시 ○○구 ○○로 123</p>
+              <p>주소: 전라북도 군산시 죽성로 13</p>
             </div>
           </div>
 
