@@ -1,13 +1,5 @@
 "use client"
 
-// 정적 생성용 함수
-export async function generateStaticParams() {
-  const { POSTS } = await import('@/lib/data')
-  return POSTS.map((post) => ({
-    id: post.id.toString(),
-  }))
-}
-
 /**
  * 동문 커뮤니티 상세 페이지
  * - 개별 게시글의 상세 내용을 표시
