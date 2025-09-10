@@ -1,26 +1,211 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Updated color tokens to match Korean school alumni site design */
+  --background: oklch(0.99 0.005 106); /* Light gray background */
+  --foreground: oklch(0.35 0.01 250); /* Dark gray text */
+  --card: oklch(1 0 0); /* White cards */
+  --card-foreground: oklch(0.35 0.01 250); /* Dark gray card text */
+  --popover: oklch(1 0 0); /* White popovers */
+  --popover-foreground: oklch(0.35 0.01 250); /* Dark gray popover text */
+  --primary: oklch(0.55 0.15 240); /* Blue primary color for trust */
+  --primary-foreground: oklch(1 0 0); /* White text on primary */
+  --secondary: oklch(0.75 0.12 220); /* Light blue accent color */
+  --secondary-foreground: oklch(0.35 0.01 250); /* Dark gray on secondary */
+  --muted: oklch(0.97 0.005 240); /* Light blue muted background */
+  --muted-foreground: oklch(0.5 0.01 250); /* Medium gray muted text */
+  --accent: oklch(0.75 0.12 220); /* Light blue highlights */
+  --accent-foreground: oklch(1 0 0); /* White text on accent */
+  --destructive: oklch(0.55 0.2 25); /* Red for destructive actions */
+  --destructive-foreground: oklch(1 0 0); /* White text on destructive */
+  --border: oklch(0.85 0.005 240); /* Light blue borders */
+  --input: oklch(1 0 0); /* White input backgrounds */
+  --ring: oklch(0.55 0.15 240 / 0.5); /* Semi-transparent blue focus */
+  --chart-1: oklch(0.55 0.15 240); /* Blue */
+  --chart-2: oklch(0.75 0.12 220); /* Light Blue */
+  --chart-3: oklch(0.55 0.2 25); /* Red */
+  --chart-4: oklch(0.35 0.01 250); /* Dark Gray */
+  --chart-5: oklch(0.97 0.005 240); /* Light Blue */
+  --radius: 0.5rem;
+  --sidebar: oklch(1 0 0); /* White sidebar */
+  --sidebar-foreground: oklch(0.35 0.01 250); /* Dark gray sidebar text */
+  --sidebar-primary: oklch(0.55 0.15 240); /* Blue sidebar primary */
+  --sidebar-primary-foreground: oklch(1 0 0); /* White sidebar primary text */
+  --sidebar-accent: oklch(0.75 0.12 220); /* Light blue sidebar accent */
+  --sidebar-accent-foreground: oklch(0.35 0.01 250); /* Dark gray sidebar accent text */
+  --sidebar-border: oklch(0.85 0.005 240); /* Light blue sidebar border */
+  --sidebar-ring: oklch(0.55 0.15 240 / 0.5); /* Semi-transparent blue sidebar focus */
+}
+
+.dark {
+  --background: oklch(0.15 0.01 250);
+  --foreground: oklch(0.95 0.005 106);
+  --card: oklch(0.18 0.01 250);
+  --card-foreground: oklch(0.95 0.005 106);
+  --popover: oklch(0.18 0.01 250);
+  --popover-foreground: oklch(0.95 0.005 106);
+  --primary: oklch(0.65 0.15 240);
+  --primary-foreground: oklch(0.15 0.01 250);
+  --secondary: oklch(0.25 0.01 250);
+  --secondary-foreground: oklch(0.95 0.005 106);
+  --muted: oklch(0.25 0.01 250);
+  --muted-foreground: oklch(0.65 0.005 106);
+  --accent: oklch(0.25 0.01 250);
+  --accent-foreground: oklch(0.95 0.005 106);
+  --destructive: oklch(0.45 0.15 25);
+  --destructive-foreground: oklch(0.95 0.005 106);
+  --border: oklch(0.25 0.01 250);
+  --input: oklch(0.25 0.01 250);
+  --ring: oklch(0.45 0.01 250);
+  --chart-1: oklch(0.55 0.2 240);
+  --chart-2: oklch(0.7 0.15 220);
+  --chart-3: oklch(0.75 0.18 70);
+  --chart-4: oklch(0.6 0.25 300);
+  --chart-5: oklch(0.65 0.2 15);
+  --sidebar: oklch(0.18 0.01 250);
+  --sidebar-foreground: oklch(0.95 0.005 106);
+  --sidebar-primary: oklch(0.55 0.2 240);
+  --sidebar-primary-foreground: oklch(0.95 0.005 106);
+  --sidebar-accent: oklch(0.25 0.01 250);
+  --sidebar-accent-foreground: oklch(0.95 0.005 106);
+  --sidebar-border: oklch(0.25 0.01 250);
+  --sidebar-ring: oklch(0.45 0.01 250);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
   }
-}
+  body {
+    @apply bg-background text-foreground text-lg leading-relaxed;
+    font-size: 18px;
+    line-height: 1.7;
+  }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  /* 배경 패턴 최적화 - 더 작은 SVG로 성능 향상 */
+  .bg-dot-pattern {
+    background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000000' fill-opacity='0.05'%3E%3Ccircle cx='20' cy='20' r='1.5'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 40px 40px;
+  }
+  
+  /* 기본 텍스트 크기 증가 */
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl font-bold;
+  }
+  
+  h2 {
+    @apply text-3xl md:text-4xl lg:text-5xl font-semibold;
+  }
+  
+  h3 {
+    @apply text-2xl md:text-3xl lg:text-4xl font-semibold;
+  }
+  
+  h4 {
+    @apply text-xl md:text-2xl lg:text-3xl font-medium;
+  }
+  
+  h5 {
+    @apply text-lg md:text-xl lg:text-2xl font-medium;
+  }
+  
+  h6 {
+    @apply text-base md:text-lg lg:text-xl font-medium;
+  }
+  
+  p {
+    @apply text-lg md:text-xl leading-relaxed;
+  }
+  
+  /* 버튼 텍스트 크기 증가 */
+  button {
+    @apply text-base md:text-lg;
+  }
+  
+  /* 입력 필드 텍스트 크기 증가 */
+  input, textarea, select {
+    @apply text-lg md:text-xl;
+  }
+  
+  /* 링크 텍스트 크기 증가 */
+  a {
+    @apply text-lg md:text-xl;
+  }
+  
+  /* 카드 제목과 내용 크기 증가 */
+  .card-title {
+    @apply text-xl md:text-2xl lg:text-3xl font-semibold;
+  }
+  
+  .card-content {
+    @apply text-lg md:text-xl leading-relaxed;
+  }
+  
+  /* 네비게이션 메뉴 텍스트 크기 증가 */
+  nav a {
+    @apply text-lg md:text-xl font-medium;
+  }
+  
+  /* 배지 텍스트 크기 증가 */
+  .badge {
+    @apply text-sm md:text-base;
+  }
+  
+  /* 작은 텍스트도 가독성 향상 */
+  small, .text-sm {
+    @apply text-base md:text-lg;
+  }
+  
+  /* 테이블 텍스트 크기 증가 */
+  table {
+    @apply text-lg md:text-xl;
+  }
+  
+  th, td {
+    @apply text-lg md:text-xl py-3 px-4;
+  }
 }
