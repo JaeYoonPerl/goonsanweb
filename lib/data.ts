@@ -135,9 +135,9 @@ export const POSTS: Post[] = [
 
 // 캐러셀 이미지 데이터
 export const CAROUSEL_IMAGES = [
-  { src: "/dumImg01.jpg", alt: "배너 1" },
-  { src: "/dumImg02.jpg", alt: "배너 2" },
-  { src: "/dumImg03.jpg", alt: "배너 3" },
+  { src: "/dumimg01.png", alt: "군산중고등학교 100주년 기념사업회장 취임식" },
+  { src: "/dumimg02.png", alt: "2023 군산중고총동창회 걷기행사" },
+  { src: "/dumimg03.png", alt: "군산중고등학교 개교 100주년 기념" },
 ]
 
 // 소셜 미디어 링크 데이터

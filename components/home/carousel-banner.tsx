@@ -19,11 +19,11 @@ export function CarouselBanner({ setCarouselApi }: CarouselBannerProps) {
           <CarouselContent>
             {CAROUSEL_IMAGES.map((image, index) => (
               <CarouselItem key={index}>
-                <div className="relative h-[300px] sm:h-[450px] lg:h-[500px] rounded-xl overflow-hidden shadow-lg">
+                <div className="relative w-full h-[600px] rounded-xl overflow-hidden shadow-lg">
                   <img 
                     src={image.src} 
                     alt={image.alt} 
-                    className="w-full h-full object-cover object-center transition-transform duration-300 hover:scale-105" 
+                    className="w-full h-full object-contain object-center transition-transform duration-300 hover:scale-105" 
                   />
                 </div>
               </CarouselItem>

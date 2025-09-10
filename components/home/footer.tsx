@@ -17,7 +17,7 @@ export function Footer() {
 
           <div>
             <h4 className="font-semibold text-foreground mb-3">연락처</h4>
-            <div className="space-y-1 text-sm text-muted-foreground">
+            <div className="space-y-1 text-xs text-muted-foreground">
               <p>전화: 063)443-5050</p>
               <p>이메일: alumni@gunsan.hs.kr</p>
               <p>주소: 전라북도 군산시 죽성로 13</p>
@@ -26,7 +26,7 @@ export function Footer() {
 
           <div>
             <h4 className="font-semibold text-foreground mb-3">바로가기</h4>
-            <div className="space-y-1 text-sm">
+            <div className="space-y-1 text-xs">
               <a href="#" className="block text-muted-foreground hover:text-primary transition-colors">
                 모교 홈페이지
               </a>
@@ -41,7 +41,7 @@ export function Footer() {
         </div>
 
         <div className="border-t border-border mt-8 pt-6 text-center">
-          <p className="text-sm text-muted-foreground">© 2024 군산중고등학교 총동창회. All rights reserved.</p>
+          <p className="text-xs text-muted-foreground">© 2024 군산중고등학교 총동창회. All rights reserved.</p>
         </div>
       </div>
     </footer>
