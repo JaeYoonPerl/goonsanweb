@@ -1,13 +1,5 @@
 "use client"
 
-// 정적 생성용 함수
-export async function generateStaticParams() {
-  const { POSTS } = await import('@/lib/data')
-  return POSTS.map((post) => ({
-    id: post.id.toString(),
-  }))
-}
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"

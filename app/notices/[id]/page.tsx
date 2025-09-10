@@ -8,14 +8,6 @@
  * - 관리자 권한에 따른 수정/삭제 버튼 표시
  */
 
-// 정적 생성용 함수
-export async function generateStaticParams() {
-  const { NOTICES } = await import('@/lib/data')
-  return NOTICES.map((notice) => ({
-    id: notice.id.toString(),
-  }))
-}
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
