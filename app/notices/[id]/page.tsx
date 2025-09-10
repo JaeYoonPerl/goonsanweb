@@ -1,3 +1,5 @@
+"use client"
+
 // 정적 생성용 함수
 export async function generateStaticParams() {
   const { NOTICES } = await import('@/lib/data')
@@ -5,8 +7,6 @@ export async function generateStaticParams() {
     id: notice.id.toString(),
   }))
 }
-
-"use client"
 
 /**
  * 공지사항 상세 페이지

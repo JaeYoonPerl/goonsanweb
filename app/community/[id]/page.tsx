@@ -1,3 +1,5 @@
+"use client"
+
 // 정적 생성용 함수
 export async function generateStaticParams() {
   const { POSTS } = await import('@/lib/data')
@@ -5,8 +7,6 @@ export async function generateStaticParams() {
     id: post.id.toString(),
   }))
 }
-
-"use client"
 
 /**
  * 동문 커뮤니티 상세 페이지
