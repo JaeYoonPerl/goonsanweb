@@ -1,3 +1,11 @@
+// 정적 생성용 함수
+export async function generateStaticParams() {
+  const { NOTICES } = await import('@/lib/data')
+  return NOTICES.map((notice) => ({
+    id: notice.id.toString(),
+  }))
+}
+
 "use client"
 
 /**
