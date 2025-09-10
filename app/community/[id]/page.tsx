@@ -1,3 +1,5 @@
+"use client"
+
 /**
  * 동문 커뮤니티 상세 페이지
  * - 개별 게시글의 상세 내용을 표시
@@ -13,8 +15,6 @@ export async function generateStaticParams() {
     id: post.id.toString(),
   }))
 }
-
-"use client"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"

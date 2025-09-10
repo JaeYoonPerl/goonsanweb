@@ -1,3 +1,5 @@
+"use client"
+
 /**
  * 공지사항 상세 페이지
  * - 개별 공지사항의 상세 내용을 표시
@@ -13,8 +15,6 @@ export async function generateStaticParams() {
     id: notice.id.toString(),
   }))
 }
-
-"use client"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"

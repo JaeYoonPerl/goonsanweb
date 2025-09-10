@@ -1,3 +1,5 @@
+"use client"
+
 // 정적 생성용 함수
 export async function generateStaticParams() {
   const { NOTICES } = await import('@/lib/data')
@@ -5,8 +7,6 @@ export async function generateStaticParams() {
     id: notice.id.toString(),
   }))
 }
-
-"use client"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
