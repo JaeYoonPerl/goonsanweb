@@ -44,8 +44,8 @@ function Header() {
 
   return (
     <header className="bg-card border-b border-border">
-      <div className="container mx-auto px-4 py-4">
-        <div className="flex items-center justify-between">
+      <div className="w-full px-4 py-4">
+        <div className="flex items-center justify-between max-w-7xl mx-auto">
           <div 
             className="flex items-center gap-6 cursor-pointer hover:opacity-80 transition-opacity"
             onClick={handleLogoClick}

@@ -36,20 +36,20 @@ function HomePage() {
         <Header />
         <CarouselBanner setCarouselApi={handleCarouselApiChange} />
         
-      <main className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <NoticesBoard notices={displayNotices} />
             <CommunityBoard posts={displayPosts} />
-        </div>
-      </main>
+          </div>
+        </main>
 
-      <section className="container mx-auto px-4 py-12">
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <SocialMediaLinks />
           <AcademicCalendar />
-      </section>
+        </section>
 
         <Footer />
-        </div>
+      </div>
     </div>
   )
 }

@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className="font-sans">
+      <body className="font-sans min-h-screen bg-background">
         <Suspense fallback={null}>{children}</Suspense>
       </body>
     </html>
