@@ -7,8 +7,8 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <GraduationCap className="h-6 w-6 text-primary" />
-              <h3 className="font-semibold text-foreground">군산중고등학교 총동창회</h3>
+              <GraduationCap className="h-5 w-5 text-primary" />
+              <h3 className="font-semibold text-foreground text-sm">군산중고등학교 총동창회</h3>
             </div>
             <p className="text-sm text-muted-foreground">
               모교의 전통을 이어가며 동문들 간의 소중한 인연을 지속해 나가는 공간입니다.

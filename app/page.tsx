@@ -30,6 +30,9 @@ function HomePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 relative overflow-hidden">
+      {/* 추가 배경 그라데이션 레이어 */}
+      <div className="absolute inset-0 bg-gradient-to-tr from-cyan-50/50 via-transparent to-indigo-50/50"></div>
+      <div className="absolute inset-0 bg-gradient-to-bl from-transparent via-blue-50/30 to-sky-50/50"></div>
       <BackgroundDecorations />
       
       <div className="relative z-10">

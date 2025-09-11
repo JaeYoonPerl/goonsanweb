@@ -14,7 +14,7 @@ interface CarouselBannerProps {
 export function CarouselBanner({ setCarouselApi }: CarouselBannerProps) {
   return (
     <section className="bg-primary/5">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
         <Carousel opts={{ loop: true }} className="w-full" setApi={setCarouselApi}>
           <CarouselContent>
             {CAROUSEL_IMAGES.map((image, index) => (
