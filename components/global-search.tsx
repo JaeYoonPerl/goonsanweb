@@ -168,68 +168,68 @@ export function GlobalSearch({ isOpen, onClose }: GlobalSearchProps) {
       <Card className="w-full max-w-4xl mx-4 max-h-[85vh] overflow-hidden">
         <CardContent className="p-6">
           {/* 검색 헤더 */}
-          <div className="flex items-center gap-4 mb-6">
+          <div className="flex items-center gap-3 mb-4">
             <div className="relative flex-1">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-8 w-8 text-muted-foreground" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
               <Input
                 ref={inputRef}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="공지사항, 커뮤니티 게시글 검색..."
-                className="pl-16 text-2xl py-6 h-18"
+                className="pl-12 text-sm py-3 h-10"
               />
             </div>
             <Button
               variant="ghost"
               size="icon"
               onClick={onClose}
-              className="h-16 w-16"
+              className="h-10 w-10"
             >
-              <X className="h-8 w-8" />
+              <X className="h-5 w-5" />
             </Button>
           </div>
 
           {/* 검색 결과 */}
           <div className="max-h-[60vh] overflow-y-auto">
             {isLoading ? (
-              <div className="text-center py-8 text-muted-foreground">
+              <div className="text-center py-6 text-muted-foreground text-sm">
                 검색 중...
               </div>
             ) : query.trim() ? (
               results.length > 0 ? (
-                <div className="space-y-4">
+                <div className="space-y-3">
                   {results.map((result) => (
                     <div
                       key={`${result.type}-${result.id}`}
                       onClick={() => handleResultClick(result)}
-                      className="p-6 border rounded-lg hover:bg-muted/50 cursor-pointer transition-colors"
+                      className="p-4 border rounded-lg hover:bg-muted/50 cursor-pointer transition-colors"
                     >
                       <div className="flex items-start justify-between mb-2">
                         <div className="flex items-center gap-2">
-                          <Badge variant={result.type === 'notice' ? 'default' : 'secondary'}>
+                          <Badge variant={result.type === 'notice' ? 'default' : 'secondary'} className="text-xs">
                             {result.type === 'notice' ? '공지사항' : '커뮤니티'}
                           </Badge>
                           {result.isImportant && (
-                            <Badge variant="destructive">중요</Badge>
+                            <Badge variant="destructive" className="text-xs">중요</Badge>
                           )}
                           {result.category && (
-                            <Badge variant="outline">{result.category}</Badge>
+                            <Badge variant="outline" className="text-xs">{result.category}</Badge>
                           )}
                         </div>
-                        <span className="text-sm text-muted-foreground">
+                        <span className="text-xs text-muted-foreground">
                           {result.date}
                         </span>
                       </div>
                       
-                      <h3 className="text-2xl font-medium mb-3 line-clamp-1">
+                      <h3 className="text-lg font-medium mb-2 line-clamp-1">
                         {highlightText(result.title, query)}
                       </h3>
                       
-                      <p className="text-lg text-muted-foreground mb-3 line-clamp-2">
+                      <p className="text-sm text-muted-foreground mb-2 line-clamp-2">
                         {highlightText(result.content, query)}
                       </p>
                       
-                      <div className="flex items-center gap-4 text-base text-muted-foreground">
+                      <div className="flex items-center gap-3 text-sm text-muted-foreground">
                         <span>{result.author}</span>
                         {result.grade && <span>({result.grade})</span>}
                       </div>
@@ -237,12 +237,12 @@ export function GlobalSearch({ isOpen, onClose }: GlobalSearchProps) {
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-8 text-muted-foreground">
+                <div className="text-center py-6 text-muted-foreground text-sm">
                   검색 결과가 없습니다.
                 </div>
               )
             ) : (
-              <div className="text-center py-8 text-muted-foreground">
+              <div className="text-center py-6 text-muted-foreground text-sm">
                 검색어를 입력해주세요.
               </div>
             )}

@@ -98,27 +98,27 @@ export default function CommunityPage() {
           <CardContent className="p-6">
             <div className="flex flex-col gap-6">
               {/* Search Bar */}
-              <div className="flex gap-3">
+              <div className="flex gap-2">
                 <div className="relative flex-1">
-                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-8 w-8 text-muted-foreground" />
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                   <Input 
                     placeholder="게시글을 검색하세요..." 
-                    className="pl-16 text-2xl py-6 h-18"
+                    className="pl-12 text-sm py-3 h-10"
                     value={searchTerm}
                     onChange={(e) => handleSearch(e.target.value)}
                   />
                 </div>
-                <Button onClick={() => handleSearch("")} size="lg" className="text-lg h-14 px-6">초기화</Button>
+                <Button onClick={() => handleSearch("")} size="sm" className="text-sm h-10 px-4">초기화</Button>
               </div>
 
               {/* Categories */}
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-2">
                 {categories.map((category) => (
                   <Button 
                     key={category} 
                     variant={selectedCategory === category ? "default" : "outline"} 
-                    size="lg"
-                    className="text-xl h-14 px-8"
+                    size="sm"
+                    className="text-sm h-8 px-4"
                     onClick={() => handleCategoryFilter(category)}
                   >
                     {category}
@@ -128,7 +128,7 @@ export default function CommunityPage() {
 
               {/* Search Results Info */}
               {(searchTerm || selectedCategory !== "전체") && (
-                <div className="text-base text-muted-foreground">
+                <div className="text-sm text-muted-foreground">
                   {searchTerm && `"${searchTerm}" `}
                   {selectedCategory !== "전체" && `${selectedCategory} 카테고리 `}
                   검색 결과: {filteredPosts.length}건
@@ -141,54 +141,54 @@ export default function CommunityPage() {
         {/* Posts List */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center justify-between text-xl">
+            <CardTitle className="flex items-center justify-between text-lg">
               <span>커뮤니티 게시글 ({filteredPosts.length}건)</span>
               {!loading && isLoggedIn && (
                 <Link href="/community/write">
-                  <Button size="lg" className="text-base">글쓰기</Button>
+                  <Button size="sm" className="text-sm">글쓰기</Button>
                 </Link>
               )}
             </CardTitle>
           </CardHeader>
           <CardContent>
             {currentItems.length === 0 ? (
-              <div className="text-center py-12 text-muted-foreground text-lg">
+              <div className="text-center py-8 text-muted-foreground text-sm">
                 검색 결과가 없습니다.
               </div>
             ) : (
-              <div className="space-y-8">
+              <div className="space-y-4">
                 {currentItems.map((post) => (
-                  <div key={post.id} className="border-b border-border pb-8 last:border-b-0 last:pb-0">
-                    <div className="flex items-start gap-4">
-                      <Badge variant="outline" className="text-sm">
+                  <div key={post.id} className="border-b border-border pb-4 last:border-b-0 last:pb-0">
+                    <div className="flex items-start gap-3">
+                      <Badge variant="outline" className="text-xs">
                       {post.category}
                     </Badge>
                     <div className="flex-1">
                         <Link href={`/community/${post.id}`}>
-                          <h3 className="text-3xl font-medium text-foreground mb-3 hover:text-primary cursor-pointer flex items-center gap-2">
+                          <h3 className="text-xl font-medium text-foreground mb-2 hover:text-primary cursor-pointer flex items-center gap-2">
                         {post.title}
                             {hasImage(post.content) && (
-                              <Image className="h-5 w-5 text-muted-foreground" />
+                              <Image className="h-4 w-4 text-muted-foreground" />
                             )}
                       </h3>
                         </Link>
-                        <p className="text-xl text-muted-foreground mb-4 line-clamp-2">{stripHtml(post.content)}</p>
+                        <p className="text-sm text-muted-foreground mb-3 line-clamp-2">{stripHtml(post.content)}</p>
 
                       {/* Author and Date */}
-                        <div className="flex items-center justify-between text-lg text-muted-foreground mb-4">
-                          <div className="flex items-center gap-6">
+                        <div className="flex items-center justify-between text-sm text-muted-foreground mb-3">
+                          <div className="flex items-center gap-4">
                           <span>
                             작성자: {post.author} ({post.grade})
                           </span>
                           <span>작성일: {post.date}</span>
                         </div>
-                          <div className="flex items-center gap-6">
-                            <div className="flex items-center gap-2">
-                              <Eye className="h-5 w-5" />
+                          <div className="flex items-center gap-4">
+                            <div className="flex items-center gap-1">
+                              <Eye className="h-4 w-4" />
                           <span>{post.views}</span>
                         </div>
-                            <div className="flex items-center gap-2">
-                              <Heart className="h-5 w-5" />
+                            <div className="flex items-center gap-1">
+                              <Heart className="h-4 w-4" />
                               <span>{post.likes}</span>
                       </div>
                         </div>
@@ -203,23 +203,23 @@ export default function CommunityPage() {
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="flex justify-center mt-10">
-                <div className="flex items-center gap-3">
-                  <Button variant="outline" size="lg" onClick={() => goTo(page - 1)} disabled={page === 1} className="text-base">
+              <div className="flex justify-center mt-6">
+                <div className="flex items-center gap-2">
+                  <Button variant="outline" size="sm" onClick={() => goTo(page - 1)} disabled={page === 1} className="text-sm">
                   이전
                 </Button>
                   {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
                     <Button
                       key={p}
                       variant={p === page ? "default" : "outline"}
-                      size="lg"
-                      className="text-base"
+                      size="sm"
+                      className="text-sm"
                       onClick={() => goTo(p)}
                     >
                       {p}
                 </Button>
                   ))}
-                  <Button variant="outline" size="lg" onClick={() => goTo(page + 1)} disabled={page === totalPages} className="text-base">
+                  <Button variant="outline" size="sm" onClick={() => goTo(page + 1)} disabled={page === totalPages} className="text-sm">
                   다음
                 </Button>
               </div>

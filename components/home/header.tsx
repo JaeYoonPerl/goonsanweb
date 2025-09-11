@@ -50,50 +50,50 @@ function Header() {
             className="flex items-center gap-6 cursor-pointer hover:opacity-80 transition-opacity"
             onClick={handleLogoClick}
           >
-            <GraduationCap className="h-14 w-14 text-primary" />
+            <GraduationCap className="h-11 w-11 text-primary" />
             <div>
-              <h1 className="text-3xl font-bold text-foreground">군산중고등학교</h1>
-              <p className="text-lg text-muted-foreground">총동창회</p>
+              <h1 className="text-2xl font-bold text-foreground">군산중고등학교</h1>
+              <p className="text-sm text-muted-foreground">총동창회</p>
             </div>
           </div>
-          <nav className="hidden md:flex items-center gap-12">
-            <a href="/notices" className="text-foreground hover:text-primary transition-colors text-2xl font-medium py-2 px-4">
+          <nav className="hidden md:flex items-center gap-8">
+            <a href="/notices" className="text-foreground hover:text-primary transition-colors text-lg font-medium py-2 px-3">
               공지사항
             </a>
-            <a href="/community" className="text-foreground hover:text-primary transition-colors text-2xl font-medium py-2 px-4">
+            <a href="/community" className="text-foreground hover:text-primary transition-colors text-lg font-medium py-2 px-3">
               동문 커뮤니티
             </a>
             {!loading && isLoggedIn && isAdmin && (
-              <a href="/members" className="text-foreground hover:text-primary transition-colors text-2xl font-medium py-2 px-4">
+              <a href="/members" className="text-foreground hover:text-primary transition-colors text-lg font-medium py-2 px-3">
                 회원목록
               </a>
             )}
           </nav>
-           <div className="flex items-center gap-6">
+           <div className="flex items-center gap-4">
              {/* 검색 버튼 */}
              <Button
                variant="outline"
                onClick={handleSearchOpen}
-               className="h-12 px-6 text-lg gap-2"
+               className="h-10 px-4 text-sm gap-2"
              >
-               <Search className="h-5 w-5" />
+               <Search className="h-4 w-4" />
                검색
              </Button>
             
             {!loading && isLoggedIn ? (
               <>
-                <Link href="/mypage" className="hidden md:flex items-center gap-4 text-lg hover:text-primary transition-colors">
-                  <User className="h-6 w-6" />
+                <Link href="/mypage" className="hidden md:flex items-center gap-3 text-sm hover:text-primary transition-colors">
+                  <User className="h-5 w-5" />
                   <span>{user?.name} ({user?.grade})</span>
                 </Link>
-                <Button variant="outline" size="lg" onClick={handleLogout} className="gap-3 text-lg h-12 px-6">
-                  <LogOut className="h-6 w-6" />
+                <Button variant="outline" size="sm" onClick={handleLogout} className="gap-2 text-sm h-10 px-4">
+                  <LogOut className="h-4 w-4" />
                   로그아웃
                 </Button>
               </>
             ) : !loading && (
               <Link href="/login">
-                <Button variant="outline" size="lg" className="text-lg h-12 px-6">
+                <Button variant="outline" size="sm" className="text-sm h-10 px-4">
                   로그인
                 </Button>
               </Link>

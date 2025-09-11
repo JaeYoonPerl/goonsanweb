@@ -113,53 +113,53 @@ export default function NoticesPage() {
         {/* Notices List */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center justify-between text-xl">
+            <CardTitle className="flex items-center justify-between text-lg">
               <span>전체 공지사항 ({filteredNotices.length}건)</span>
               {!loading && isLoggedIn && isAdmin && (
                 <Link href="/notices/write">
-                  <Button size="lg" className="text-base">글쓰기</Button>
+                  <Button size="sm" className="text-sm">글쓰기</Button>
                 </Link>
               )}
             </CardTitle>
           </CardHeader>
           <CardContent>
             {currentItems.length === 0 ? (
-              <div className="text-center py-12 text-muted-foreground text-lg">
+              <div className="text-center py-8 text-muted-foreground text-sm">
                 검색 결과가 없습니다.
               </div>
             ) : (
-              <div className="space-y-6">
+              <div className="space-y-4">
                 {currentItems.map((notice) => (
-                  <div key={notice.id} className="border-b border-border pb-6 last:border-b-0 last:pb-0">
-                    <div className="flex items-start gap-4">
+                  <div key={notice.id} className="border-b border-border pb-4 last:border-b-0 last:pb-0">
+                    <div className="flex items-start gap-3">
                     <Badge
                       variant={notice.isImportant ? "destructive" : notice.type === "행사" ? "outline" : "secondary"}
-                        className="text-sm"
+                        className="text-xs"
                     >
                       {notice.type}
                     </Badge>
                     <div className="flex-1">
                         <Link href={`/notices/${notice.id}`}>
-                          <h3 className="text-3xl font-medium text-foreground mb-3 hover:text-primary cursor-pointer flex items-center gap-2">
+                          <h3 className="text-xl font-medium text-foreground mb-2 hover:text-primary cursor-pointer flex items-center gap-2">
                         {notice.title}
                             {hasImage(notice.content) && (
-                              <Image className="h-5 w-5 text-muted-foreground" />
+                              <Image className="h-4 w-4 text-muted-foreground" />
                             )}
                       </h3>
                         </Link>
-                        <p className="text-xl text-muted-foreground mb-4 line-clamp-2">{stripHtml(notice.content)}</p>
-                        <div className="flex items-center justify-between text-lg text-muted-foreground">
-                          <div className="flex items-center gap-6">
+                        <p className="text-sm text-muted-foreground mb-3 line-clamp-2">{stripHtml(notice.content)}</p>
+                        <div className="flex items-center justify-between text-sm text-muted-foreground">
+                          <div className="flex items-center gap-4">
                           <span>작성자: {notice.author}</span>
                           <span>작성일: {notice.date}</span>
                         </div>
-                          <div className="flex items-center gap-6">
-                            <div className="flex items-center gap-2">
-                              <Eye className="h-5 w-5" />
+                          <div className="flex items-center gap-4">
+                            <div className="flex items-center gap-1">
+                              <Eye className="h-4 w-4" />
                           <span>{notice.views}</span>
                             </div>
-                            <div className="flex items-center gap-2">
-                              <Heart className="h-5 w-5" />
+                            <div className="flex items-center gap-1">
+                              <Heart className="h-4 w-4" />
                               <span>{notice.likes || 0}</span>
                             </div>
                           </div>
@@ -173,23 +173,23 @@ export default function NoticesPage() {
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="flex justify-center mt-10">
-                <div className="flex items-center gap-3">
-                  <Button variant="outline" size="lg" onClick={() => goTo(page - 1)} disabled={page === 1} className="text-base">
+              <div className="flex justify-center mt-6">
+                <div className="flex items-center gap-2">
+                  <Button variant="outline" size="sm" onClick={() => goTo(page - 1)} disabled={page === 1} className="text-sm">
                   이전
                 </Button>
                   {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
                     <Button
                       key={p}
                       variant={p === page ? "default" : "outline"}
-                      size="lg"
-                      className="text-base"
+                      size="sm"
+                      className="text-sm"
                       onClick={() => goTo(p)}
                     >
                       {p}
                 </Button>
                   ))}
-                  <Button variant="outline" size="lg" onClick={() => goTo(page + 1)} disabled={page === totalPages} className="text-base">
+                  <Button variant="outline" size="sm" onClick={() => goTo(page + 1)} disabled={page === totalPages} className="text-sm">
                   다음
                 </Button>
               </div>
