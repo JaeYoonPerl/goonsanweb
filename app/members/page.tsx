@@ -16,7 +16,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Users, Search, Filter, UserCheck, UserX, Mail, Calendar, GraduationCap } from "lucide-react"
 import Link from "next/link"
 import { useState, useEffect, useMemo, useCallback } from "react"
-import { useAuth } from "@/hooks/use-auth"
+import { useAuth } from "@/hooks"
 import Header from "@/components/home/header"
 
 interface Member {

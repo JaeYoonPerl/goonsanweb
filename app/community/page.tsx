@@ -14,14 +14,12 @@ import { Input } from "@/components/ui/input"
 import { Search, Eye, Heart, Image } from "lucide-react"
 import Link from "next/link"
 import { useState, useEffect, useCallback, useMemo } from "react"
-import { useAuth } from "@/hooks/use-auth"
+import { useAuth } from "@/hooks"
 import { stripHtml, hasImage } from "@/lib/utils"
 import Header from "@/components/home/header"
 import { POSTS } from "@/lib/data"
-import { BackgroundDecorations } from "@/components/common/background-decorations"
-import { COMMUNITY_CATEGORIES, PAGINATION_CONFIG } from "@/lib/constants"
-import { postStorage } from "@/lib/storage"
-import { CommunityPost, CommunityCategory, LegacyPost } from "@/lib/types"
+import { BackgroundDecorations } from "@/components"
+import { COMMUNITY_CATEGORIES, PAGINATION_CONFIG, postStorage, CommunityPost, CommunityCategory } from "@/lib"
 
 export default function CommunityPage() {
   // 상태 관리

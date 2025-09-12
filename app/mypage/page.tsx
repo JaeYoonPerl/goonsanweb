@@ -14,11 +14,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { User, Edit, Trash2, MessageCircle, Eye, Heart, Calendar, Settings } from "lucide-react"
 import Link from "next/link"
 import { useState, useEffect, useMemo, useCallback } from "react"
-import { useAuth } from "@/hooks/use-auth"
+import { useAuth } from "@/hooks"
 import Header from "@/components/home/header"
 import { stripHtml } from "@/lib/utils"
-import { postStorage, noticeStorage, commentStorage } from "@/lib/storage"
-import { CommunityPost, Notice, Comment } from "@/lib/types"
+import { postStorage, noticeStorage, commentStorage, CommunityPost, Notice, Comment } from "@/lib"
 
 export default function MyPage() {
   const { user, isLoggedIn, loading } = useAuth()

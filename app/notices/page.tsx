@@ -13,15 +13,12 @@ import { Badge } from "@/components/ui/badge"
 import { Eye, Image, Heart } from "lucide-react"
 import Link from "next/link"
 import { useState, useEffect, useCallback, useMemo } from "react"
-import { useAuth } from "@/hooks/use-auth"
+import { useAuth } from "@/hooks"
 import { stripHtml, hasImage } from "@/lib/utils"
 import Header from "@/components/home/header"
 import { NOTICES } from "@/lib/data"
-import { BackgroundDecorations } from "@/components/common/background-decorations"
-import { SearchSection } from "@/components/common/search-section"
-import { NOTICE_TYPES, PAGINATION_CONFIG } from "@/lib/constants"
-import { noticeStorage } from "@/lib/storage"
-import { Notice, NoticeType, LegacyNotice } from "@/lib/types"
+import { BackgroundDecorations, SearchSection } from "@/components"
+import { NOTICE_TYPES, PAGINATION_CONFIG, noticeStorage, Notice, NoticeType } from "@/lib"
 
 export default function NoticesPage() {
   // 상태 관리

@@ -14,9 +14,8 @@ import { CommunityBoard } from "@/components/home/community-board"
 import SocialMediaLinks from "@/components/home/social-media-links"
 import { AcademicCalendar } from "@/components/home/academic-calendar"
 import { Footer } from "@/components/home/footer"
-import { BackgroundDecorations } from "@/components/common/background-decorations"
-import { useHomeData } from "@/hooks/use-home-data"
-import { useCarousel } from "@/hooks/use-carousel"
+import { BackgroundDecorations } from "@/components"
+import { useHomeData, useCarousel } from "@/hooks"
 
 function HomePage() {
   const [carouselApi, setCarouselApi] = useState<any>(null)
@@ -43,16 +42,16 @@ function HomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <NoticesBoard notices={displayNotices} />
             <CommunityBoard posts={displayPosts} />
-          </div>
-        </main>
+        </div>
+      </main>
 
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <SocialMediaLinks />
           <AcademicCalendar />
-        </section>
+      </section>
 
         <Footer />
-      </div>
+        </div>
     </div>
   )
 }

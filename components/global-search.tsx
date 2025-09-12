@@ -7,8 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { useRouter } from "next/navigation"
-import { NOTICES, POSTS } from "@/lib/data"
-import { stripHtml } from "@/lib/utils"
+import { NOTICES, POSTS, stripHtml } from "@/lib"
 
 interface SearchResult {
   id: string

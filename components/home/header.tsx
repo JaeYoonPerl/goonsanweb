@@ -9,7 +9,7 @@ import { useState, useCallback, memo } from "react"
 import { GraduationCap, LogOut, User, Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { useAuth } from "@/hooks/use-auth"
+import { useAuth } from "@/hooks"
 import { useRouter, usePathname } from "next/navigation"
 import { LazyGlobalSearch } from "@/components/lazy-components"
 
