@@ -17,81 +17,67 @@ import { useState, useEffect, useMemo, useCallback } from "react"
 import { useAuth } from "@/hooks/use-auth"
 import Header from "@/components/home/header"
 import { stripHtml } from "@/lib/utils"
+import { postStorage, noticeStorage, commentStorage } from "@/lib/storage"
+import { CommunityPost, Notice, Comment } from "@/lib/types"
 
 export default function MyPage() {
   const { user, isLoggedIn, loading } = useAuth()
-  const [userPosts, setUserPosts] = useState<any[]>([])
-  const [userNotices, setUserNotices] = useState<any[]>([])
-  const [userComments, setUserComments] = useState<any[]>([])
+  const [userPosts, setUserPosts] = useState<CommunityPost[]>([])
+  const [userNotices, setUserNotices] = useState<Notice[]>([])
+  const [userComments, setUserComments] = useState<Comment[]>([])
   const [postTitles, setPostTitles] = useState<{[key: string]: string}>({})
 
-  useEffect(() => {
+  // 사용자 데이터 로드 (메모이제이션)
+  const loadUserData = useCallback(() => {
     if (!isLoggedIn || !user) return
 
     // 사용자가 작성한 게시글 로드
-    const tempPosts = JSON.parse(localStorage.getItem("tempPosts") || "[]")
-    const userPosts = tempPosts.filter((post: any) => 
+    const tempPosts = postStorage.loadTempPosts()
+    const filteredPosts = tempPosts.filter((post: CommunityPost) => 
       post.author === user.name && post.grade === user.grade
     )
-    setUserPosts(userPosts)
+    setUserPosts(filteredPosts)
 
     // 사용자가 작성한 공지사항 로드
-    const tempNotices = JSON.parse(localStorage.getItem("tempNotices") || "[]")
-    const userNotices = tempNotices.filter((notice: any) => 
+    const tempNotices = noticeStorage.loadTempNotices()
+    const filteredNotices = tempNotices.filter((notice: Notice) => 
       notice.author === user.name
     )
-    setUserNotices(userNotices)
+    setUserNotices(filteredNotices)
 
     // 사용자가 작성한 댓글 로드
-    const allComments: any[] = []
-    
-    // 모든 댓글 키를 찾아서 로드
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i)
-      if (key && (key.startsWith('comments_post_') || key.startsWith('comments_notice_'))) {
-        try {
-          const comments = JSON.parse(localStorage.getItem(key) || '[]')
-          allComments.push(...comments)
-        } catch (error) {
-          console.error(`Failed to parse comments from ${key}:`, error)
-        }
-      }
-    }
-
-    const userComments = allComments.filter((comment: any) => 
-      comment.author === user.name && comment.grade === user.grade
-    )
+    const userComments = commentStorage.loadAllUserComments(user.name, user.grade)
     setUserComments(userComments)
 
     // 게시글 제목 매핑 생성
     const titles: {[key: string]: string} = {}
     
     // 커뮤니티 게시글 제목
-    const allPosts = [...tempPosts, ...JSON.parse(localStorage.getItem("tempPosts") || "[]")]
-    allPosts.forEach((post: any) => {
+    tempPosts.forEach((post: CommunityPost) => {
       titles[`post_${post.id}`] = post.title
     })
     
     // 공지사항 제목
-    const allNotices = [...tempNotices, ...JSON.parse(localStorage.getItem("tempNotices") || "[]")]
-    allNotices.forEach((notice: any) => {
+    tempNotices.forEach((notice: Notice) => {
       titles[`notice_${notice.id}`] = notice.title
     })
     
     setPostTitles(titles)
   }, [user, isLoggedIn])
 
+  useEffect(() => {
+    loadUserData()
+  }, [loadUserData])
+
   const handleDeletePost = useCallback((postId: number, type: 'post' | 'notice') => {
     if (!confirm('정말로 삭제하시겠습니까?')) return
 
-    const storageKey = type === 'post' ? 'tempPosts' : 'tempNotices'
-    const currentData = JSON.parse(localStorage.getItem(storageKey) || '[]')
-    const updatedData = currentData.filter((item: any) => item.id !== postId)
-    localStorage.setItem(storageKey, JSON.stringify(updatedData))
-
+    // 스토리지에서 삭제
     if (type === 'post') {
+      postStorage.deletePost(postId)
       setUserPosts(prev => prev.filter(post => post.id !== postId))
     } else {
+      noticeStorage.deleteNotice(postId)
       setUserNotices(prev => prev.filter(notice => notice.id !== postId))
     }
   }, [])

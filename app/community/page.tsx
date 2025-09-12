@@ -3,6 +3,7 @@
  * - 동문 커뮤니티 게시글 목록을 표시하고 검색/카테고리 필터링 기능 제공
  * - 페이지네이션으로 대량의 데이터 효율적 표시
  * - 로그인한 사용자만 글 작성 가능
+ * - 최적화된 성능과 타입 안정성 보장
  */
 "use client"
 
@@ -10,87 +11,81 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
-import { Search, Eye, Heart, MessageCircle, Image } from "lucide-react"
+import { Search, Eye, Heart, Image } from "lucide-react"
 import Link from "next/link"
 import { useState, useEffect, useCallback, useMemo } from "react"
 import { useAuth } from "@/hooks/use-auth"
-import { useRouter, usePathname } from "next/navigation"
 import { stripHtml, hasImage } from "@/lib/utils"
 import Header from "@/components/home/header"
 import { POSTS } from "@/lib/data"
 import { BackgroundDecorations } from "@/components/common/background-decorations"
-import { SearchSection } from "@/components/common/search-section"
-
-const categories = ["전체", "동기회", "모교소식", "사업소개", "취업정보", "모임제안", "기타"]
+import { COMMUNITY_CATEGORIES, PAGINATION_CONFIG } from "@/lib/constants"
+import { postStorage } from "@/lib/storage"
+import { CommunityPost, CommunityCategory, LegacyPost } from "@/lib/types"
 
 export default function CommunityPage() {
-  const itemsPerPage = 3
+  // 상태 관리
   const [page, setPage] = useState(1)
   const [searchTerm, setSearchTerm] = useState("")
-  const [selectedCategory, setSelectedCategory] = useState("전체")
-  const [allPosts, setAllPosts] = useState(POSTS)
-  const { user, isLoggedIn, logout, loading } = useAuth()
-  const router = useRouter()
-  const pathname = usePathname()
+  const [selectedCategory, setSelectedCategory] = useState<CommunityCategory>("전체")
+  const [allPosts, setAllPosts] = useState<CommunityPost[]>(POSTS as CommunityPost[])
+  const { user, isLoggedIn, loading } = useAuth()
 
   // 임시 저장된 게시글 로드
   useEffect(() => {
-    const tempPosts = JSON.parse(localStorage.getItem("tempPosts") || "[]")
+    const tempPosts = postStorage.loadTempPosts()
     if (tempPosts.length > 0) {
-      setAllPosts([...tempPosts, ...POSTS])
+      setAllPosts([...tempPosts, ...(POSTS as CommunityPost[])])
     }
   }, [])
 
-  // 검색 필터링
-  const filteredPosts = allPosts.filter((post) => {
-    const matchesSearch = searchTerm === "" || 
-      post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      post.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      post.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      post.grade.toLowerCase().includes(searchTerm.toLowerCase())
-    
-    const matchesCategory = selectedCategory === "전체" || post.category === selectedCategory
-    
-    return matchesSearch && matchesCategory
-  })
+  // 검색 및 필터링 로직 (메모이제이션)
+  const filteredPosts = useMemo(() => {
+    return allPosts.filter((post) => {
+      const matchesSearch = searchTerm === "" || 
+        post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        post.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        post.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        post.grade.toLowerCase().includes(searchTerm.toLowerCase())
+      
+      const matchesCategory = selectedCategory === "전체" || post.category === selectedCategory
+      
+      return matchesSearch && matchesCategory
+    })
+  }, [allPosts, searchTerm, selectedCategory])
 
-  const totalPages = Math.max(1, Math.ceil(filteredPosts.length / itemsPerPage))
-  const start = (page - 1) * itemsPerPage
-  const currentItems = filteredPosts.slice(start, start + itemsPerPage)
+  // 페이지네이션 계산 (메모이제이션)
+  const paginationInfo = useMemo(() => {
+    const totalPages = Math.max(1, Math.ceil(filteredPosts.length / PAGINATION_CONFIG.ITEMS_PER_PAGE))
+    const start = (page - 1) * PAGINATION_CONFIG.ITEMS_PER_PAGE
+    const currentItems = filteredPosts.slice(start, start + PAGINATION_CONFIG.ITEMS_PER_PAGE)
+    
+    return { totalPages, currentItems }
+  }, [filteredPosts, page])
 
-  const goTo = (p: number) => {
-    if (p < 1 || p > totalPages) return
+  // 이벤트 핸들러들 (useCallback으로 최적화)
+  const goTo = useCallback((p: number) => {
+    if (p < 1 || p > paginationInfo.totalPages) return
     setPage(p)
-  }
+  }, [paginationInfo.totalPages])
 
-  // 검색어가 변경되면 첫 페이지로 이동
-  const handleSearch = (term: string) => {
+  const handleSearch = useCallback((term: string) => {
     setSearchTerm(term)
     setPage(1)
-  }
+  }, [])
 
-  const handleCategoryFilter = (category: string) => {
+  const handleCategoryFilter = useCallback((category: CommunityCategory) => {
     setSelectedCategory(category)
     setPage(1)
-  }
+  }, [])
 
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 relative overflow-hidden">
-      {/* 배경 패턴 */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-0 left-0 w-full h-full" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
-        }}></div>
-      </div>
-      
-      {/* 장식적 요소들 */}
-      <div className="absolute top-20 right-10 w-32 h-32 bg-gradient-to-br from-blue-200/20 to-blue-300/20 rounded-full blur-xl"></div>
-      <div className="absolute bottom-20 left-10 w-40 h-40 bg-gradient-to-br from-indigo-200/20 to-blue-200/20 rounded-full blur-xl"></div>
+      <BackgroundDecorations />
       
       <div className="relative z-10">
-      {/* Header */}
-      <Header />
+        <Header />
 
       <main className="container mx-auto px-4 py-8">
         {/* Search and Categories */}
@@ -113,7 +108,7 @@ export default function CommunityPage() {
 
               {/* Categories */}
               <div className="flex flex-wrap gap-2">
-                {categories.map((category) => (
+                {COMMUNITY_CATEGORIES.map((category) => (
                   <Button 
                     key={category} 
                     variant={selectedCategory === category ? "default" : "outline"} 
@@ -151,13 +146,13 @@ export default function CommunityPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            {currentItems.length === 0 ? (
+            {paginationInfo.currentItems.length === 0 ? (
               <div className="text-center py-8 text-muted-foreground text-sm">
                 검색 결과가 없습니다.
               </div>
             ) : (
               <div className="space-y-4">
-                {currentItems.map((post) => (
+                {paginationInfo.currentItems.map((post) => (
                   <div key={post.id} className="border-b border-border pb-4 last:border-b-0 last:pb-0">
                     <div className="flex items-start gap-3">
                       <Badge variant="outline" className="text-xs">
@@ -202,13 +197,19 @@ export default function CommunityPage() {
             )}
 
             {/* Pagination */}
-            {totalPages > 1 && (
+            {paginationInfo.totalPages > 1 && (
               <div className="flex justify-center mt-6">
                 <div className="flex items-center gap-2">
-                  <Button variant="outline" size="sm" onClick={() => goTo(page - 1)} disabled={page === 1} className="text-sm">
-                  이전
-                </Button>
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => goTo(page - 1)} 
+                    disabled={page === 1} 
+                    className="text-sm"
+                  >
+                    이전
+                  </Button>
+                  {Array.from({ length: paginationInfo.totalPages }, (_, i) => i + 1).map((p) => (
                     <Button
                       key={p}
                       variant={p === page ? "default" : "outline"}
@@ -217,13 +218,19 @@ export default function CommunityPage() {
                       onClick={() => goTo(p)}
                     >
                       {p}
-                </Button>
+                    </Button>
                   ))}
-                  <Button variant="outline" size="sm" onClick={() => goTo(page + 1)} disabled={page === totalPages} className="text-sm">
-                  다음
-                </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => goTo(page + 1)} 
+                    disabled={page === paginationInfo.totalPages} 
+                    className="text-sm"
+                  >
+                    다음
+                  </Button>
+                </div>
               </div>
-            </div>
             )}
           </CardContent>
         </Card>

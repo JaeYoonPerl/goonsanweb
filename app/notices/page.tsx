@@ -3,92 +3,106 @@
  * - 공지사항 목록을 표시하고 검색/필터링 기능 제공
  * - 페이지네이션으로 대량의 데이터 효율적 표시
  * - 관리자 권한에 따른 글 작성/수정 버튼 표시
+ * - 최적화된 성능과 타입 안정성 보장
  */
 "use client"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Search, Eye, Image, Heart, MessageCircle } from "lucide-react"
+import { Eye, Image, Heart } from "lucide-react"
 import Link from "next/link"
 import { useState, useEffect, useCallback, useMemo } from "react"
 import { useAuth } from "@/hooks/use-auth"
-import { useRouter, usePathname } from "next/navigation"
 import { stripHtml, hasImage } from "@/lib/utils"
 import Header from "@/components/home/header"
 import { NOTICES } from "@/lib/data"
 import { BackgroundDecorations } from "@/components/common/background-decorations"
 import { SearchSection } from "@/components/common/search-section"
+import { NOTICE_TYPES, PAGINATION_CONFIG } from "@/lib/constants"
+import { noticeStorage } from "@/lib/storage"
+import { Notice, NoticeType, LegacyNotice } from "@/lib/types"
 
 export default function NoticesPage() {
-  const itemsPerPage = 3
+  // 상태 관리
   const [page, setPage] = useState(1)
   const [searchTerm, setSearchTerm] = useState("")
-  const [searchType, setSearchType] = useState("전체")
-  const [allNotices, setAllNotices] = useState(NOTICES)
-  const { user, isLoggedIn, isAdmin, logout, loading } = useAuth()
-  const router = useRouter()
-  const pathname = usePathname()
+  const [searchType, setSearchType] = useState<NoticeType>("전체")
+  const [allNotices, setAllNotices] = useState<Notice[]>(NOTICES.map(notice => ({
+    ...notice,
+    grade: notice.author // 기존 데이터에 grade 필드가 없으므로 author로 매핑
+  })) as Notice[])
+  const { user, isLoggedIn, isAdmin, loading } = useAuth()
 
   // 임시 저장된 공지사항 로드
   useEffect(() => {
-    const tempNotices = JSON.parse(localStorage.getItem("tempNotices") || "[]")
+    const tempNotices = noticeStorage.loadTempNotices()
     if (tempNotices.length > 0) {
-      setAllNotices([...tempNotices, ...NOTICES])
+      const legacyNotices = NOTICES.map(notice => ({
+        ...notice,
+        grade: notice.author
+      })) as Notice[]
+      setAllNotices([...tempNotices, ...legacyNotices])
     }
   }, [])
 
-  // 검색 필터링
-  const filteredNotices = allNotices.filter((notice) => {
-    const matchesSearch = searchTerm === "" || 
-      notice.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      notice.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      notice.author.toLowerCase().includes(searchTerm.toLowerCase())
-    
-    const matchesType = searchType === "전체" || notice.type === searchType
-    
-    return matchesSearch && matchesType
-  })
+  // 검색 및 필터링 로직 (메모이제이션)
+  const filteredNotices = useMemo(() => {
+    return allNotices.filter((notice) => {
+      const matchesSearch = searchTerm === "" || 
+        notice.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        notice.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        notice.author.toLowerCase().includes(searchTerm.toLowerCase())
+      
+      const matchesType = searchType === "전체" || notice.type === searchType
+      
+      return matchesSearch && matchesType
+    })
+  }, [allNotices, searchTerm, searchType])
 
-  const totalPages = Math.max(1, Math.ceil(filteredNotices.length / itemsPerPage))
-  const start = (page - 1) * itemsPerPage
-  const currentItems = filteredNotices.slice(start, start + itemsPerPage)
+  // 페이지네이션 계산 (메모이제이션)
+  const paginationInfo = useMemo(() => {
+    const totalPages = Math.max(1, Math.ceil(filteredNotices.length / PAGINATION_CONFIG.ITEMS_PER_PAGE))
+    const start = (page - 1) * PAGINATION_CONFIG.ITEMS_PER_PAGE
+    const currentItems = filteredNotices.slice(start, start + PAGINATION_CONFIG.ITEMS_PER_PAGE)
+    
+    return { totalPages, currentItems }
+  }, [filteredNotices, page])
 
-  const goTo = (p: number) => {
-    if (p < 1 || p > totalPages) return
+  // 이벤트 핸들러들 (useCallback으로 최적화)
+  const goTo = useCallback((p: number) => {
+    if (p < 1 || p > paginationInfo.totalPages) return
     setPage(p)
-  }
+  }, [paginationInfo.totalPages])
 
-  // 검색어가 변경되면 첫 페이지로 이동
   const handleSearch = useCallback((term: string) => {
     setSearchTerm(term)
     setPage(1)
   }, [])
 
-  const handleTypeFilter = useCallback((type: string) => {
+  const handleTypeFilter = useCallback((type: NoticeType) => {
     setSearchType(type)
     setPage(1)
   }, [])
 
-
-  const searchTypes = useMemo(() => ["전체", "중요", "일반", "행사"], [])
-
+  // 검색 필터 설정 (메모이제이션)
   const searchFilters = useMemo(() => 
-    searchTypes.map(type => ({
+    NOTICE_TYPES.map(type => ({
       label: type,
       value: type,
-      onClick: handleTypeFilter,
+      onClick: () => handleTypeFilter(type),
       isActive: searchType === type
-    })), [searchTypes, searchType, handleTypeFilter]
+    })), [searchType, handleTypeFilter]
   )
 
+  // 검색 결과 정보 (메모이제이션)
   const searchResultsInfo = useMemo(() => {
     if (!searchTerm && searchType === "전체") return null
     return (
-      <div className="text-lg text-muted-foreground">
-        {searchTerm && `"${searchTerm}" 검색 결과: `}
+      <div className="text-sm text-muted-foreground">
+        {searchTerm && `"${searchTerm}" `}
         {searchType !== "전체" && `${searchType} 공지사항 `}
-        총 {filteredNotices.length}개
+        검색 결과: {filteredNotices.length}건
       </div>
     )
   }, [searchTerm, searchType, filteredNotices.length])
@@ -123,13 +137,13 @@ export default function NoticesPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            {currentItems.length === 0 ? (
+            {paginationInfo.currentItems.length === 0 ? (
               <div className="text-center py-8 text-muted-foreground text-sm">
                 검색 결과가 없습니다.
               </div>
             ) : (
               <div className="space-y-4">
-                {currentItems.map((notice) => (
+                {paginationInfo.currentItems.map((notice) => (
                   <div key={notice.id} className="border-b border-border pb-4 last:border-b-0 last:pb-0">
                     <div className="flex items-start gap-3">
                     <Badge
@@ -172,13 +186,19 @@ export default function NoticesPage() {
             )}
 
             {/* Pagination */}
-            {totalPages > 1 && (
+            {paginationInfo.totalPages > 1 && (
               <div className="flex justify-center mt-6">
                 <div className="flex items-center gap-2">
-                  <Button variant="outline" size="sm" onClick={() => goTo(page - 1)} disabled={page === 1} className="text-sm">
-                  이전
-                </Button>
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => goTo(page - 1)} 
+                    disabled={page === 1} 
+                    className="text-sm"
+                  >
+                    이전
+                  </Button>
+                  {Array.from({ length: paginationInfo.totalPages }, (_, i) => i + 1).map((p) => (
                     <Button
                       key={p}
                       variant={p === page ? "default" : "outline"}
@@ -187,13 +207,19 @@ export default function NoticesPage() {
                       onClick={() => goTo(p)}
                     >
                       {p}
-                </Button>
+                    </Button>
                   ))}
-                  <Button variant="outline" size="sm" onClick={() => goTo(page + 1)} disabled={page === totalPages} className="text-sm">
-                  다음
-                </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => goTo(page + 1)} 
+                    disabled={page === paginationInfo.totalPages} 
+                    className="text-sm"
+                  >
+                    다음
+                  </Button>
+                </div>
               </div>
-            </div>
             )}
           </CardContent>
         </Card>
