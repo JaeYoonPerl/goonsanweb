@@ -141,7 +141,7 @@ export const CAROUSEL_IMAGES = [
 ]
 
 // 소셜 미디어 링크 데이터
-export const SOCIAL_LINKS = [
+export const SOCIAL_MEDIA_DATA = [
   {
     name: "페이스북",
     url: "https://www.facebook.com/share/1AwpSz6oma/",

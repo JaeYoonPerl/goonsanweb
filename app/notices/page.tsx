@@ -17,7 +17,8 @@ import { useAuth } from "@/hooks"
 import { stripHtml, hasImage } from "@/lib/utils"
 import Header from "@/components/home/header"
 import { NOTICES } from "@/lib/data"
-import { BackgroundDecorations, SearchSection } from "@/components"
+import { BackgroundDecorations } from "@/components/common/background-decorations"
+import { SearchSection } from "@/components/common/search-section"
 import { NOTICE_TYPES, PAGINATION_CONFIG, noticeStorage, Notice, NoticeType } from "@/lib"
 
 export default function NoticesPage() {

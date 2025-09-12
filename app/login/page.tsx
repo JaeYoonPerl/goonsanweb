@@ -14,7 +14,7 @@ import { GraduationCap, Eye, EyeOff } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { useAuth } from "@/hooks/use-auth"
+import { useAuth } from "@/hooks"
 
 // 임시 사용자 데이터 (실제로는 데이터베이스에서 관리)
 const users = [

@@ -14,7 +14,7 @@ import { CommunityBoard } from "@/components/home/community-board"
 import SocialMediaLinks from "@/components/home/social-media-links"
 import { AcademicCalendar } from "@/components/home/academic-calendar"
 import { Footer } from "@/components/home/footer"
-import { BackgroundDecorations } from "@/components"
+import { BackgroundDecorations } from "@/components/common/background-decorations"
 import { useHomeData, useCarousel } from "@/hooks"
 
 function HomePage() {
@@ -29,11 +29,7 @@ function HomePage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 relative overflow-hidden">
-      {/* 추가 배경 그라데이션 레이어 */}
-      <div className="absolute inset-0 bg-gradient-to-tr from-cyan-50/50 via-transparent to-indigo-50/50"></div>
-      <div className="absolute inset-0 bg-gradient-to-bl from-transparent via-blue-50/30 to-sky-50/50"></div>
       <BackgroundDecorations />
-      
       <div className="relative z-10">
         <Header />
         <CarouselBanner setCarouselApi={handleCarouselApiChange} />
@@ -42,16 +38,16 @@ function HomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <NoticesBoard notices={displayNotices} />
             <CommunityBoard posts={displayPosts} />
-        </div>
-      </main>
+          </div>
+        </main>
 
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <SocialMediaLinks />
           <AcademicCalendar />
-      </section>
+        </section>
 
         <Footer />
-        </div>
+      </div>
     </div>
   )
 }

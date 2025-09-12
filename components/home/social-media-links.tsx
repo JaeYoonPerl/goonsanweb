@@ -1,7 +1,7 @@
 import { memo, useMemo } from "react"
 import { Button } from "@/components/ui/button"
 import { Facebook, Youtube, ExternalLink } from "lucide-react"
-import { SOCIAL_LINKS } from "@/lib/data"
+import { SOCIAL_MEDIA_DATA } from "@/lib/data"
 
 // 스타일 맵을 컴포넌트 외부로 이동하여 재생성 방지
 const BUTTON_STYLES = {
@@ -29,7 +29,7 @@ function SocialMediaLinks() {
   return (
     <div className="flex justify-center mb-12">
       <div className="flex gap-8">
-        {SOCIAL_LINKS.map((link) => (
+        {SOCIAL_MEDIA_DATA.map((link) => (
           <a
             key={link.name}
             href={link.url}

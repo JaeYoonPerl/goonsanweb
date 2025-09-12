@@ -18,7 +18,7 @@ import { useAuth } from "@/hooks"
 import { stripHtml, hasImage } from "@/lib/utils"
 import Header from "@/components/home/header"
 import { POSTS } from "@/lib/data"
-import { BackgroundDecorations } from "@/components"
+import { BackgroundDecorations } from "@/components/common/background-decorations"
 import { COMMUNITY_CATEGORIES, PAGINATION_CONFIG, postStorage, CommunityPost, CommunityCategory } from "@/lib"
 
 export default function CommunityPage() {

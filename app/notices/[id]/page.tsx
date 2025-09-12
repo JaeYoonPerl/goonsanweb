@@ -17,10 +17,10 @@ import { ArrowLeft, Eye, Calendar, User, Trash2, Edit, MessageCircle, Send, Hear
 import Link from "next/link"
 import { useParams, useRouter, usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
-import { useAuth } from "@/hooks/use-auth"
+import { useAuth } from "@/hooks"
 import Header from "@/components/home/header"
-import { usePostNavigation } from "@/hooks/use-post-navigation"
-import { useComments } from "@/hooks/use-comments"
+import { usePostNavigation } from "@/hooks"
+import { useComments } from "@/hooks"
 
 // 기존 공지사항 더미 데이터
 const notices = [

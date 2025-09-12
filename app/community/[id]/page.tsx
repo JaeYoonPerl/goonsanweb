@@ -17,10 +17,10 @@ import { ArrowLeft, Eye, Heart, MessageCircle, User, Send, Trash2, Edit, Chevron
 import Link from "next/link"
 import { useParams, useRouter, usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
-import { useAuth } from "@/hooks/use-auth"
+import { useAuth } from "@/hooks"
 import Header from "@/components/home/header"
-import { usePostNavigation } from "@/hooks/use-post-navigation"
-import { useComments } from "@/hooks/use-comments"
+import { usePostNavigation } from "@/hooks"
+import { useComments } from "@/hooks"
 
 // 기존 커뮤니티 게시글 더미 데이터
 const posts = [

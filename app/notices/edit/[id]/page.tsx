@@ -10,7 +10,7 @@ import { ArrowLeft, Save, X } from "lucide-react"
 import Link from "next/link"
 import { useParams, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
-import { useAuth } from "@/hooks/use-auth"
+import { useAuth } from "@/hooks"
 import { RichTextEditor } from "@/components/rich-text-editor"
 import Header from "@/components/home/header"
 
