@@ -17,7 +17,7 @@ export function Footer() {
 
                  <div>
                    <h4 className="font-semibold text-foreground mb-3 text-xs">연락처</h4>
-                   <div className="space-y-1 text-[8px] text-muted-foreground">
+                   <div className="space-y-1 text-sm text-muted-foreground">
                      <p>전화: 063)443-5050</p>
                      <p>이메일: alumni@gunsan.hs.kr</p>
                      <p>주소: 전라북도 군산시 죽성로 13</p>
@@ -26,7 +26,7 @@ export function Footer() {
 
                  <div>
                    <h4 className="font-semibold text-foreground mb-3 text-xs">바로가기</h4>
-                   <div className="space-y-1 text-[8px]">
+                   <div className="space-y-1 text-sm">
                      <a href="#" className="block text-muted-foreground hover:text-primary transition-colors">
                        모교 홈페이지
                      </a>
