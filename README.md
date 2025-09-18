@@ -1,0 +1,382 @@
+# 군산중고등학교 총동창회 웹사이트
+
+## 📋 프로젝트 개요
+군산중고등학교 총동창회 공식 웹사이트입니다. 동문들의 소통과 정보 공유를 위한 플랫폼으로, 공지사항, 커뮤니티, 학사일정 등의 기능을 제공합니다.
+
+## 🛠️ 기술 스택
+- **프레임워크**: Next.js 15.2.4 (React 기반)
+- **언어**: TypeScript
+- **스타일링**: Tailwind CSS
+- **UI 컴포넌트**: Radix UI
+- **아이콘**: Lucide React
+- **폼 관리**: React Hook Form + Zod
+- **차트**: Recharts
+
+## 📁 프로젝트 구조
+
+```
+goonsanweb/
+├── app/                    # Next.js App Router 페이지들
+│   ├── community/         # 커뮤니티 관련 페이지
+│   ├── notices/           # 공지사항 관련 페이지
+│   ├── login/             # 로그인 페이지
+│   ├── signup/            # 회원가입 페이지
+│   ├── members/           # 회원 관리 페이지
+│   ├── mypage/            # 마이페이지
+│   ├── layout.tsx         # 전체 레이아웃
+│   └── page.tsx           # 홈페이지
+├── components/            # 재사용 가능한 컴포넌트들
+│   ├── common/           # 공통 컴포넌트
+│   ├── home/             # 홈페이지 전용 컴포넌트
+│   └── ui/               # UI 컴포넌트 라이브러리
+├── hooks/                # 커스텀 훅들
+├── lib/                  # 유틸리티 함수들
+└── public/               # 정적 파일들
+```
+
+## 🚀 시작하기
+
+### 1. 프로젝트 설치
+```bash
+# 의존성 설치
+npm install
+```
+
+### 2. 개발 서버 실행
+```bash
+# 일반 개발 서버
+npm run dev
+
+# 터보 모드 (더 빠름)
+npm run dev:turbo
+```
+
+### 3. 브라우저에서 확인
+- http://localhost:3000 접속
+
+## 📜 사용 가능한 스크립트 (상세 설명)
+
+### 🚀 개발 관련 스크립트
+
+#### `npm run dev`
+```bash
+npm run dev
+# 또는
+next dev
+```
+- **용도**: 개발 서버를 실행합니다
+- **포트**: http://localhost:3000 (기본값)
+- **특징**: 
+  - 파일 변경 시 자동으로 페이지 새로고침 (Hot Reload)
+  - 개발용 최적화 설정 적용
+  - 에러 메시지가 브라우저에 표시됨
+- **사용 시기**: 평상시 개발할 때
+
+#### `npm run dev:turbo`
+```bash
+npm run dev:turbo
+# 또는
+next dev --turbo
+```
+- **용도**: 터보 모드로 개발 서버 실행
+- **특징**:
+  - 일반 dev보다 2-3배 빠른 빌드 속도
+  - Rust 기반 번들러 사용
+  - 더 빠른 Hot Reload
+- **사용 시기**: 프로젝트가 클 때, 빠른 개발이 필요할 때
+
+### 🏗️ 빌드 관련 스크립트
+
+#### `npm run build`
+```bash
+npm run build
+# 또는
+next build
+```
+- **용도**: 프로덕션용 최적화된 빌드 생성
+- **생성 파일**: `.next` 폴더에 최적화된 파일들
+- **특징**:
+  - 코드 압축 및 최적화
+  - 불필요한 코드 제거 (Tree Shaking)
+  - 이미지 최적화
+  - CSS 최적화
+- **사용 시기**: 배포 전, 성능 테스트 전
+
+#### `npm run build:analyze`
+```bash
+npm run build:analyze
+# 또는
+ANALYZE=true next build
+```
+- **용도**: 번들 크기 분석과 함께 빌드
+- **생성 파일**: `bundle-analyzer.html` 파일
+- **특징**:
+  - 각 라이브러리가 번들에서 차지하는 크기 시각화
+  - 불필요한 라이브러리 식별 가능
+  - 성능 최적화 가이드 제공
+- **사용 시기**: 번들 크기 최적화가 필요할 때
+
+#### `npm run start`
+```bash
+npm run start
+# 또는
+next start
+```
+- **용도**: 빌드된 앱을 프로덕션 모드로 실행
+- **전제조건**: `npm run build` 먼저 실행 필요
+- **특징**:
+  - 프로덕션 환경과 동일한 성능
+  - 최적화된 코드로 실행
+- **사용 시기**: 배포 전 최종 테스트
+
+#### `npm run preview`
+```bash
+npm run preview
+# 또는
+next build && next start
+```
+- **용도**: 빌드 후 즉시 미리보기
+- **동작**: `build` + `start`를 순차적으로 실행
+- **사용 시기**: 빌드와 실행을 한 번에 하고 싶을 때
+
+### 🔍 코드 품질 관련 스크립트
+
+#### `npm run lint`
+```bash
+npm run lint
+# 또는
+next lint
+```
+- **용도**: ESLint로 코드 스타일 및 오류 검사
+- **검사 항목**:
+  - 코딩 스타일 규칙 위반
+  - 잠재적 버그
+  - React/Next.js 베스트 프랙티스
+- **출력**: 콘솔에 오류 및 경고 메시지 표시
+- **사용 시기**: 코드 품질 확인, 커밋 전
+
+#### `npm run lint:fix`
+```bash
+npm run lint:fix
+# 또는
+next lint --fix
+```
+- **용도**: ESLint 오류를 자동으로 수정
+- **수정 가능한 항목**:
+  - 들여쓰기 오류
+  - 세미콜론 누락
+  - 따옴표 스타일
+  - import 순서
+- **사용 시기**: 많은 lint 오류가 있을 때
+
+#### `npm run type-check`
+```bash
+npm run type-check
+# 또는
+tsc --noEmit
+```
+- **용도**: TypeScript 타입 검사만 실행 (파일 생성 안함)
+- **검사 항목**:
+  - 타입 오류
+  - 인터페이스 불일치
+  - 함수 매개변수 타입 오류
+- **특징**: 빠른 타입 검사 (빌드 없이)
+- **사용 시기**: 타입 오류만 확인하고 싶을 때
+
+### 🧹 유틸리티 스크립트
+
+#### `npm run clean`
+```bash
+npm run clean
+# 또는
+rm -rf .next out dist
+```
+- **용도**: 빌드 파일들 정리
+- **삭제 폴더**:
+  - `.next`: Next.js 빌드 파일
+  - `out`: 정적 내보내기 파일
+  - `dist`: 기타 빌드 파일
+- **사용 시기**:
+  - 빌드 오류가 발생했을 때
+  - 깨끗한 빌드를 원할 때
+  - 디스크 공간 확보가 필요할 때
+
+### 📋 스크립트 사용 시나리오
+
+#### 🆕 새 프로젝트 시작
+```bash
+npm install          # 의존성 설치
+npm run dev          # 개발 서버 시작
+```
+
+#### 🔧 개발 중
+```bash
+npm run dev:turbo    # 빠른 개발 서버
+npm run lint         # 코드 품질 확인
+npm run type-check   # 타입 오류 확인
+```
+
+#### 🚀 배포 전
+```bash
+npm run clean        # 이전 빌드 정리
+npm run build        # 프로덕션 빌드
+npm run start        # 프로덕션 모드 테스트
+```
+
+#### 🐛 문제 해결
+```bash
+npm run lint:fix     # 자동 수정 가능한 오류 수정
+npm run clean        # 빌드 파일 정리
+npm run build:analyze # 번들 크기 분석
+```
+
+### ⚡ 스크립트 실행 팁
+
+1. **병렬 실행**: 여러 터미널에서 동시에 실행 가능
+   ```bash
+   # 터미널 1
+   npm run dev
+   
+   # 터미널 2
+   npm run lint --watch
+   ```
+
+2. **조건부 실행**: 환경변수와 함께 사용
+   ```bash
+   NODE_ENV=production npm run build
+   ```
+
+3. **스크립트 체이닝**: 여러 명령어를 한 번에 실행
+   ```bash
+   npm run clean && npm run build && npm run start
+   ```
+
+## 🎨 주요 기능
+
+### 1. 홈페이지 (`app/page.tsx`)
+- **이미지 캐러셀**: 학교 관련 이미지들을 슬라이드로 표시
+- **공지사항**: 최신 공지사항 목록
+- **커뮤니티**: 동문들의 게시글 목록
+- **소셜미디어 링크**: 학교 관련 SNS 링크
+- **학사일정**: 학사 일정 캘린더
+
+### 2. 공지사항 (`app/notices/`)
+- `page.tsx` - 공지사항 목록
+- `[id]/page.tsx` - 공지사항 상세보기
+- `write/page.tsx` - 공지사항 작성
+- `edit/[id]/page.tsx` - 공지사항 수정
+
+### 3. 커뮤니티 (`app/community/`)
+- `page.tsx` - 커뮤니티 게시글 목록
+- `[id]/page.tsx` - 게시글 상세보기
+- `write/page.tsx` - 게시글 작성
+- `edit/[id]/page.tsx` - 게시글 수정
+
+### 4. 사용자 관리
+- `app/login/page.tsx` - 로그인
+- `app/signup/page.tsx` - 회원가입
+- `app/members/page.tsx` - 회원 관리
+- `app/mypage/page.tsx` - 마이페이지
+
+## 🔧 설정 파일 설명
+
+### `next.config.mjs`
+Next.js 프레임워크 설정 파일
+- **ESLint/TypeScript**: 빌드 시 오류 무시 설정
+- **이미지**: localhost 도메인에서 이미지 최적화
+- **성능 최적화**: 패키지 import 최적화
+- **번들 분석**: 개발 시 번들 크기 분석 가능
+- **압축**: gzip 압축 활성화
+
+### `package.json`
+프로젝트 의존성 및 스크립트 관리
+- **dependencies**: 프로덕션에 필요한 라이브러리들
+- **devDependencies**: 개발에만 필요한 도구들
+- **scripts**: 실행 가능한 명령어들
+
+## 🎯 컴포넌트 구조
+
+### 공통 컴포넌트 (`components/common/`)
+- `background-decorations.tsx` - 배경 장식 요소
+- `error-boundary.tsx` - 에러 처리
+- `loading-spinner.tsx` - 로딩 스피너
+- `pagination.tsx` - 페이지네이션
+- `post-list-item.tsx` - 게시글 목록 아이템
+- `search-section.tsx` - 검색 섹션
+
+### 홈페이지 컴포넌트 (`components/home/`)
+- `header.tsx` - 헤더
+- `carousel-banner.tsx` - 이미지 캐러셀
+- `notices-board.tsx` - 공지사항 게시판
+- `community-board.tsx` - 커뮤니티 게시판
+- `social-media-links.tsx` - 소셜미디어 링크
+- `academic-calendar.tsx` - 학사일정
+- `footer.tsx` - 푸터
+
+### UI 컴포넌트 (`components/ui/`)
+Radix UI 기반의 재사용 가능한 UI 컴포넌트들
+- 버튼, 입력창, 다이얼로그, 드롭다운 등
+
+## 🪝 커스텀 훅 (`hooks/`)
+
+### 데이터 관리
+- `use-home-data.ts` - 홈페이지 데이터 관리
+- `use-pagination.ts` - 페이지네이션 로직
+- `use-comments.ts` - 댓글 관리
+
+### 검색 기능
+- `use-debounce.ts` - 검색 입력 디바운싱
+- `use-search-filter.ts` - 검색 필터링
+
+### 저장소 관리
+- `use-local-storage.ts` - 로컬 스토리지 관리
+- `use-optimized-storage.ts` - 최적화된 저장소 관리
+
+### UI 관련
+- `use-carousel.ts` - 캐러셀 제어
+- `use-post-navigation.ts` - 게시글 네비게이션
+
+## 🎨 스타일링
+
+### Tailwind CSS
+- 유틸리티 퍼스트 CSS 프레임워크
+- 반응형 디자인 지원
+- 다크/라이트 테마 지원
+
+### 주요 스타일 클래스
+- `bg-gradient-to-br from-blue-50 via-white to-blue-100` - 그라데이션 배경
+- `max-w-7xl mx-auto px-4 sm:px-6 lg:px-8` - 반응형 컨테이너
+- `grid grid-cols-1 lg:grid-cols-2 gap-8` - 그리드 레이아웃
+
+## 🔍 개발 팁
+
+### 1. 새로운 페이지 추가
+```bash
+# app 폴더에 새 폴더 생성 후 page.tsx 파일 추가
+mkdir app/new-page
+touch app/new-page/page.tsx
+```
+
+### 2. 새로운 컴포넌트 추가
+```bash
+# components 폴더에 새 컴포넌트 파일 생성
+touch components/new-component.tsx
+```
+
+### 3. 타입 정의
+- `lib/types.ts`에서 공통 타입 정의
+- 각 컴포넌트에서 필요한 타입은 해당 파일에 정의
+
+### 4. 데이터 관리
+- `lib/data.ts`에서 더미 데이터 관리
+- 실제 백엔드 연동 시 API 호출 로직 추가
+
+## 🚨 주의사항
+
+1. **로컬 개발 전용**: 현재 설정은 로컬 개발용으로만 구성됨
+2. **더미 데이터**: 현재는 정적 데이터 사용, 실제 백엔드 연동 필요
+3. **인증 시스템**: 로그인/회원가입 UI만 구현, 실제 인증 로직 필요
+4. **이미지 최적화**: localhost 도메인에서만 이미지 최적화 활성화
+
+## 📞 문의
+프로젝트 관련 문의사항이 있으시면 GitHub Issues를 통해 연락해주세요.
