@@ -7,7 +7,7 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
-    unoptimized: true,
+    domains: ['localhost'],
   },
   // 성능 최적화 설정
   experimental: {
