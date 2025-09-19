@@ -70,17 +70,13 @@ export default function LoginPage() {
 
       if (user) {
         // 로그인 성공 - useAuth 훅의 login 함수 사용
-        login({
-          id: user.id,
-          email: user.email,
-          name: user.name,
-          role: user.role,
-          grade: user.grade,
-          isLoggedIn: true,
-        })
-        
-        // 홈페이지로 리다이렉트
-        router.push("/")
+        const result = await login(email, password)
+        if (result.success) {
+          // 홈페이지로 리다이렉트
+          router.push("/")
+        } else {
+          setError(result.error || "로그인에 실패했습니다.")
+        }
       } else {
         setError("이메일 또는 비밀번호가 올바르지 않습니다.")
       }

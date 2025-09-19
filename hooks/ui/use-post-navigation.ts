@@ -1,22 +1,17 @@
 /**
- * 게시글 네비게이션 훅
+ * 게시글 네비게이션 훅 (Zustand 스토어 사용)
  * - 이전/다음 게시글 찾기
  * - 제목 표시를 위한 데이터 매핑
  */
 import { useMemo } from "react"
-import { NOTICES, POSTS } from "@/lib/data"
-import { noticeStorage, postStorage } from "@/lib/storage"
+import { useDataStore } from "@/stores"
 
 export function usePostNavigation(currentId: number, type: 'notice' | 'post') {
+  const { notices, posts } = useDataStore()
+  
   const allItems = useMemo(() => {
-    if (type === 'notice') {
-      const tempNotices = noticeStorage.loadTempNotices()
-      return [...tempNotices, ...NOTICES]
-    } else {
-      const tempPosts = postStorage.loadTempPosts()
-      return [...tempPosts, ...POSTS]
-    }
-  }, [type])
+    return type === 'notice' ? notices : posts
+  }, [type, notices, posts])
 
   const currentIndex = useMemo(() => 
     allItems.findIndex(item => item.id === currentId), 
@@ -33,5 +28,10 @@ export function usePostNavigation(currentId: number, type: 'notice' | 'post') {
     [allItems, currentIndex]
   )
 
-  return { prevItem, nextItem }
+  return {
+    prevItem,
+    nextItem,
+    currentIndex,
+    totalItems: allItems.length
+  }
 }
