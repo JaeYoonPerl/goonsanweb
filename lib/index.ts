@@ -4,9 +4,17 @@
  * - import 경로 단순화
  */
 
-// 상수 및 타입
+// 상수
 export * from './constants'
-export * from './types'
+
+// 타입 (중복 제거)
+export type {
+  BasePost,
+  CommunityPost,
+  Notice,
+  Comment,
+  User
+} from './types'
 
 // 스토리지 및 에러 처리
 export * from './storage'
@@ -15,5 +23,8 @@ export * from './error-handler'
 // 유틸리티 함수
 export * from './utils'
 
-// 데이터
-export * from './data'
+// 데이터 (중복 제거)
+export {
+  NOTICES,
+  POSTS
+} from './data'

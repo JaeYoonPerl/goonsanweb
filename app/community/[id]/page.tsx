@@ -471,10 +471,11 @@ export default function CommunityDetailPage() {
   const [isTempPost, setIsTempPost] = useState(false)
   
   // 이전글/다음글 네비게이션
-  const { prevPost, nextPost } = usePostNavigation(parseInt(params.id as string), 'post')
+  const { prevItem, nextItem } = usePostNavigation(parseInt(params.id as string), 'post')
   
   // 댓글 관리
-  const { comments, newComment, setNewComment, addComment } = useComments(parseInt(params.id as string), 'post')
+  const { comments, addComment } = useComments(parseInt(params.id as string), 'post')
+  const [newComment, setNewComment] = useState('')
 
   useEffect(() => {
     const postId = parseInt(params.id as string)
@@ -549,7 +550,7 @@ export default function CommunityDetailPage() {
       content: newComment.trim(),
       date: new Date().toLocaleDateString("ko-KR"),
       postId: parseInt(params.id as string),
-      postType: 'post'
+      postType: 'post' as const
     }
     
     addComment(comment)
@@ -755,15 +756,15 @@ export default function CommunityDetailPage() {
               <div className="flex justify-between items-start gap-4">
                 {/* 이전 글 */}
                 <div className="flex-1">
-                  {prevPost ? (
-                    <Link href={`/community/${prevPost.id}`} className="block">
+                  {prevItem ? (
+                    <Link href={`/community/${prevItem.id}`} className="block">
                       <div className="p-4 border rounded-lg hover:bg-muted/50 transition-colors">
                         <div className="flex items-center gap-2 text-base text-muted-foreground mb-2">
                           <ChevronLeft className="h-5 w-5" />
                           이전 글
                         </div>
                         <h4 className="text-base font-medium line-clamp-2 text-left">
-                          {prevPost.title}
+                          {prevItem.title}
                         </h4>
                       </div>
                     </Link>
@@ -789,15 +790,15 @@ export default function CommunityDetailPage() {
 
                 {/* 다음 글 */}
                 <div className="flex-1">
-                  {nextPost ? (
-                    <Link href={`/community/${nextPost.id}`} className="block">
+                  {nextItem ? (
+                    <Link href={`/community/${nextItem.id}`} className="block">
                       <div className="p-4 border rounded-lg hover:bg-muted/50 transition-colors">
                         <div className="flex items-center gap-2 text-base text-muted-foreground mb-2 justify-end">
                           다음 글
                           <ChevronRight className="h-5 w-5" />
                         </div>
                         <h4 className="text-base font-medium line-clamp-2 text-right">
-                          {nextPost.title}
+                          {nextItem.title}
                         </h4>
                       </div>
                     </Link>

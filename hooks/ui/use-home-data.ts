@@ -8,8 +8,8 @@ import { NOTICES, POSTS } from "@/lib/data"
 import { noticeStorage, postStorage } from "@/lib/storage"
 
 export function useHomeData() {
-  const [notices, setNotices] = useState(NOTICES)
-  const [posts, setPosts] = useState(POSTS)
+  const [notices, setNotices] = useState<any[]>(NOTICES)
+  const [posts, setPosts] = useState<any[]>(POSTS)
 
   useEffect(() => {
     const tempNotices = noticeStorage.loadTempNotices()
