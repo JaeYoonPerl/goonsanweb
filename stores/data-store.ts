@@ -56,12 +56,14 @@ interface DataActions {
   updateNotice: (id: number, notice: Partial<Notice>) => void
   deleteNotice: (id: number) => void
   getNotice: (id: number) => Notice | undefined
+  togglePinNotice: (id: number) => void
   
   // 게시글 관련
   addPost: (post: Omit<Post, 'id'>) => void
   updatePost: (id: number, post: Partial<Post>) => void
   deletePost: (id: number) => void
   getPost: (id: number) => Post | undefined
+  togglePinPost: (id: number) => void
   
   // 댓글 관련
   addComment: (comment: Omit<Comment, 'id'>) => void
@@ -116,6 +118,21 @@ export const useDataStore = create<DataStore>()(
         return get().notices.find(notice => notice.id === id)
       },
 
+      togglePinNotice: (id) => {
+        set((state) => ({
+          notices: state.notices.map(notice =>
+            notice.id === id ? { ...notice, isPinned: !notice.isPinned } : notice
+          )
+        }))
+        
+        // localStorage의 임시 데이터도 업데이트
+        const tempNotices = JSON.parse(localStorage.getItem("tempNotices") || "[]")
+        const updatedTempNotices = tempNotices.map((notice: any) =>
+          notice.id === id ? { ...notice, isPinned: !notice.isPinned } : notice
+        )
+        localStorage.setItem("tempNotices", JSON.stringify(updatedTempNotices))
+      },
+
       // 게시글 액션들
       addPost: (post) => {
         const newPost: Post = {
@@ -146,6 +163,21 @@ export const useDataStore = create<DataStore>()(
 
       getPost: (id) => {
         return get().posts.find(post => post.id === id)
+      },
+
+      togglePinPost: (id) => {
+        set((state) => ({
+          posts: state.posts.map(post =>
+            post.id === id ? { ...post, isPinned: !post.isPinned } : post
+          )
+        }))
+        
+        // localStorage의 임시 데이터도 업데이트
+        const tempPosts = JSON.parse(localStorage.getItem("tempPosts") || "[]")
+        const updatedTempPosts = tempPosts.map((post: any) =>
+          post.id === id ? { ...post, isPinned: !post.isPinned } : post
+        )
+        localStorage.setItem("tempPosts", JSON.stringify(updatedTempPosts))
       },
 
       // 댓글 액션들

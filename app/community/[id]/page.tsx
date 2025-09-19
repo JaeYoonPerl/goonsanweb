@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { ArrowLeft, Eye, Heart, MessageCircle, User, Send, Trash2, Edit, ChevronLeft, ChevronRight } from "lucide-react"
+import { ArrowLeft, Eye, Heart, MessageCircle, User, Send, Trash2, Edit, ChevronLeft, ChevronRight, Pin, PinOff } from "lucide-react"
 import Link from "next/link"
 import { useParams, useRouter, usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -21,6 +21,7 @@ import { useAuth } from "@/hooks"
 import Header from "@/components/home/header"
 import { usePostNavigation } from "@/hooks"
 import { useComments } from "@/hooks"
+import { useDataStore } from "@/stores"
 
 // 기존 커뮤니티 게시글 더미 데이터
 const posts = [
@@ -476,6 +477,9 @@ export default function CommunityDetailPage() {
   // 댓글 관리
   const { comments, addComment } = useComments(parseInt(params.id as string), 'post')
   const [newComment, setNewComment] = useState('')
+  
+  // 데이터 스토어
+  const { togglePinPost } = useDataStore()
 
   useEffect(() => {
     const postId = parseInt(params.id as string)
@@ -640,6 +644,29 @@ export default function CommunityDetailPage() {
                 </div>
               </div>
               <div className="flex gap-2">
+                {isAdmin && (
+                  <Button 
+                    variant={post.isPinned ? "default" : "outline"} 
+                    size="lg" 
+                    onClick={() => {
+                      togglePinPost(post.id)
+                      setPost((prev: any) => prev ? { ...prev, isPinned: !prev.isPinned } : null)
+                    }}
+                    className="gap-2 text-base"
+                  >
+                    {post.isPinned ? (
+                      <>
+                        <PinOff className="h-5 w-5" />
+                        고정 해제
+                      </>
+                    ) : (
+                      <>
+                        <Pin className="h-5 w-5" />
+                        고정
+                      </>
+                    )}
+                  </Button>
+                )}
                 {(isAdmin || (isLoggedIn && post && user && isTempPost && post.author === user.name && post.grade === user.grade)) && (
                   <>
                     <Button 

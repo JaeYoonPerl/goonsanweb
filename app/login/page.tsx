@@ -16,33 +16,6 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/hooks"
 
-// 임시 사용자 데이터 (실제로는 데이터베이스에서 관리)
-const users = [
-  {
-    id: 1,
-    email: "admin@gunsan.hs.kr",
-    password: "admin123",
-    name: "관리자",
-    role: "admin",
-    grade: "관리자",
-  },
-  {
-    id: 2,
-    email: "user1@example.com",
-    password: "user123",
-    name: "김○○",
-    role: "user",
-    grade: "85학번",
-  },
-  {
-    id: 3,
-    email: "user2@example.com",
-    password: "user123",
-    name: "이○○",
-    role: "user",
-    grade: "78학번",
-  },
-]
 
 export default function LoginPage() {
   const [email, setEmail] = useState("")
@@ -59,26 +32,13 @@ export default function LoginPage() {
     setIsLoading(true)
 
     try {
-      // 회원 목록에서 사용자 찾기
-      const storedMembers = JSON.parse(localStorage.getItem('members') || '[]')
-      
-      // 임시 사용자와 저장된 회원 모두 확인
-      const allUsers = [...users, ...storedMembers]
-      const user = allUsers.find(
-        (u) => u.email === email && u.password === password && u.isActive !== false
-      )
-
-      if (user) {
-        // 로그인 성공 - useAuth 훅의 login 함수 사용
-        const result = await login(email, password)
-        if (result.success) {
-          // 홈페이지로 리다이렉트
-          router.push("/")
-        } else {
-          setError(result.error || "로그인에 실패했습니다.")
-        }
+      // useAuth 훅의 login 함수 사용
+      const result = await login(email, password)
+      if (result.success) {
+        // 홈페이지로 리다이렉트
+        router.push("/")
       } else {
-        setError("이메일 또는 비밀번호가 올바르지 않습니다.")
+        setError(result.error || "로그인에 실패했습니다.")
       }
     } catch (error) {
       console.error('로그인 오류:', error)

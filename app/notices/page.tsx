@@ -10,7 +10,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Eye, Image, Heart } from "lucide-react"
+import { Eye, Image, Heart, Pin, PinOff } from "lucide-react"
 import Link from "next/link"
 import { useState, useEffect, useCallback, useMemo } from "react"
 import { useAuth } from "@/hooks"
@@ -20,6 +20,7 @@ import { NOTICES } from "@/lib/data"
 import { BackgroundDecorations } from "@/components/common/background-decorations"
 import { SearchSection } from "@/components/common/search-section"
 import { NOTICE_TYPES, PAGINATION_CONFIG, noticeStorage, Notice, NoticeType } from "@/lib"
+import { useDataStore } from "@/stores"
 
 export default function NoticesPage() {
   // 상태 관리
@@ -31,6 +32,7 @@ export default function NoticesPage() {
     grade: notice.author // 기존 데이터에 grade 필드가 없으므로 author로 매핑
   })) as Notice[])
   const { user, isLoggedIn, isAdmin, loading } = useAuth()
+  const { togglePinNotice } = useDataStore()
 
   // 임시 저장된 공지사항 로드
   useEffect(() => {
@@ -46,16 +48,25 @@ export default function NoticesPage() {
 
   // 검색 및 필터링 로직 (메모이제이션)
   const filteredNotices = useMemo(() => {
-    return allNotices.filter((notice) => {
-      const matchesSearch = searchTerm === "" || 
-        notice.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        notice.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        notice.author.toLowerCase().includes(searchTerm.toLowerCase())
-      
-      const matchesType = searchType === "전체" || notice.type === searchType
-      
-      return matchesSearch && matchesType
-    })
+    return allNotices
+      .filter((notice) => {
+        const matchesSearch = searchTerm === "" || 
+          notice.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          notice.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          notice.author.toLowerCase().includes(searchTerm.toLowerCase())
+        
+        const matchesType = searchType === "전체" || notice.type === searchType
+        
+        return matchesSearch && matchesType
+      })
+      .sort((a, b) => {
+        // 고정된 글 우선
+        if (a.isPinned && !b.isPinned) return -1
+        if (!a.isPinned && b.isPinned) return 1
+        
+        // 그 다음 최신 순으로 정렬 (id가 클수록 최신)
+        return b.id - a.id
+      })
   }, [allNotices, searchTerm, searchType])
 
   // 페이지네이션 계산 (메모이제이션)
@@ -151,14 +162,36 @@ export default function NoticesPage() {
                       {notice.type}
                     </Badge>
                     <div className="flex-1">
-                        <Link href={`/notices/${notice.id}`}>
-                          <h3 className="text-xl font-medium text-foreground mb-2 hover:text-primary cursor-pointer flex items-center gap-2">
-                        {notice.title}
-                            {hasImage(notice.content) && (
-                              <Image className="h-4 w-4 text-muted-foreground" />
-                            )}
-                      </h3>
-                        </Link>
+                        <div className="flex items-center gap-2 mb-2">
+                          <Link href={`/notices/${notice.id}`}>
+                            <h3 className="text-xl font-medium text-foreground hover:text-primary cursor-pointer flex items-center gap-2">
+                              {notice.title}
+                              {hasImage(notice.content) && (
+                                <Image className="h-4 w-4 text-muted-foreground" />
+                              )}
+                            </h3>
+                          </Link>
+                          {isAdmin && (
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={(e) => {
+                                e.preventDefault()
+                                togglePinNotice(notice.id)
+                                setAllNotices(prev => prev.map(n => 
+                                  n.id === notice.id ? { ...n, isPinned: !n.isPinned } : n
+                                ))
+                              }}
+                              className="h-6 w-6 p-0"
+                            >
+                              {notice.isPinned ? (
+                                <PinOff className="h-4 w-4 text-primary" />
+                              ) : (
+                                <Pin className="h-4 w-4 text-muted-foreground" />
+                              )}
+                            </Button>
+                          )}
+                        </div>
                         <p className="text-sm text-muted-foreground mb-3 line-clamp-2">{stripHtml(notice.content)}</p>
                         <div className="flex items-center justify-between text-sm text-muted-foreground">
                           <div className="flex items-center gap-4">

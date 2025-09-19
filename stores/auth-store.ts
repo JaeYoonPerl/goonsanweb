@@ -36,7 +36,7 @@ type AuthStore = AuthState & AuthActions
 const users = [
   {
     id: 1,
-    email: "admin@goonsan.com",
+    email: "admin@gunsan.hs.kr",
     password: "admin123",
     name: "관리자",
     role: "admin" as const,
@@ -45,11 +45,20 @@ const users = [
   },
   {
     id: 2,
-    email: "user@goonsan.com", 
+    email: "user1@example.com", 
     password: "user123",
-    name: "김동문",
+    name: "김○○",
     role: "user" as const,
     grade: "85학번",
+    isLoggedIn: true
+  },
+  {
+    id: 3,
+    email: "user2@example.com", 
+    password: "user123",
+    name: "이○○",
+    role: "user" as const,
+    grade: "78학번",
     isLoggedIn: true
   }
 ]
@@ -112,22 +121,42 @@ export const useAuthStore = create<AuthStore>()(
         set({ loading: true })
         
         try {
-          // 로컬 스토리지에서 사용자 정보 확인
-          const storedUser = localStorage.getItem("user")
-          if (storedUser) {
-            const userData = JSON.parse(storedUser)
-            set({
-              user: userData,
-              isLoggedIn: true,
-              isAdmin: userData.role === "admin",
-              loading: false
-            })
+          // Zustand persist에서 저장된 인증 정보 확인
+          const storedAuth = localStorage.getItem("auth-storage")
+          if (storedAuth) {
+            const authData = JSON.parse(storedAuth)
+            if (authData.state?.user && authData.state?.isLoggedIn) {
+              const { user, isLoggedIn, isAdmin } = authData.state
+              set({
+                user,
+                isLoggedIn,
+                isAdmin,
+                loading: false
+              })
+            } else {
+              set({ 
+                user: null,
+                isLoggedIn: false,
+                isAdmin: false,
+                loading: false 
+              })
+            }
           } else {
-            set({ loading: false })
+            set({ 
+              user: null,
+              isLoggedIn: false,
+              isAdmin: false,
+              loading: false 
+            })
           }
         } catch (error) {
           console.error("인증 확인 오류:", error)
-          set({ loading: false })
+          set({ 
+            user: null,
+            isLoggedIn: false,
+            isAdmin: false,
+            loading: false 
+          })
         }
       },
 
@@ -137,7 +166,11 @@ export const useAuthStore = create<AuthStore>()(
     }),
     {
       name: "auth-storage", // 로컬 스토리지 키
-      partialize: (state) => ({ user: state.user }), // user만 저장
+      partialize: (state) => ({ 
+        user: state.user,
+        isLoggedIn: state.isLoggedIn,
+        isAdmin: state.isAdmin
+      }), // 인증 관련 상태 모두 저장
     }
   )
 )

@@ -27,12 +27,14 @@ export interface BasePost {
 // 커뮤니티 게시글
 export interface CommunityPost extends BasePost {
   category: CommunityCategory
+  isPinned?: boolean
 }
 
 // 공지사항
 export interface Notice extends BasePost {
   type: NoticeType
   isImportant: boolean
+  isPinned?: boolean
 }
 
 // 댓글

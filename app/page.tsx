@@ -6,7 +6,7 @@
  */
 "use client"
 
-import { useState, useCallback, memo } from "react"
+import { useState, useCallback, memo, useEffect } from "react"
 import Header from "@/components/home/header"
 import { CarouselBanner } from "@/components/home/carousel-banner"
 import { NoticesBoard } from "@/components/home/notices-board"
@@ -22,6 +22,22 @@ function HomePage() {
   const { displayNotices, displayPosts } = useHomeData()
   
   useCarousel(carouselApi)
+
+  // 페이지 포커스 시 데이터 새로고침 (클라이언트 사이드에서만)
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+
+    const handleFocus = () => {
+      // 페이지가 다시 포커스될 때 데이터 새로고침을 트리거
+      window.dispatchEvent(new Event('storage'))
+    }
+
+    window.addEventListener('focus', handleFocus)
+    
+    return () => {
+      window.removeEventListener('focus', handleFocus)
+    }
+  }, [])
 
   const handleCarouselApiChange = useCallback((api: any) => {
     setCarouselApi(api)

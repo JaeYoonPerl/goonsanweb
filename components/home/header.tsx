@@ -6,7 +6,7 @@
  * - 전역 검색 모달 기능
  */
 import { useState, useCallback, memo } from "react"
-import { GraduationCap, LogOut, User, Search } from "lucide-react"
+import { LogOut, User, Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { useAuth } from "@/hooks"
@@ -50,7 +50,11 @@ function Header() {
             className="flex items-center gap-6 cursor-pointer hover:opacity-80 transition-opacity"
             onClick={handleLogoClick}
           >
-            <GraduationCap className="h-11 w-11 text-primary" />
+            <img 
+              src="/goonsanChong.webp" 
+              alt="군산중고등학교 로고" 
+              className="h-16 w-16 object-contain"
+            />
             <div>
               <h1 className="text-2xl font-bold text-foreground">군산중고등학교</h1>
               <p className="text-sm text-muted-foreground">총동창회</p>
@@ -80,7 +84,9 @@ function Header() {
                검색
              </Button>
             
-            {!loading && isLoggedIn ? (
+            {loading ? (
+              <div className="text-sm text-muted-foreground">로딩 중...</div>
+            ) : isLoggedIn ? (
               <>
                 <Link href="/mypage" className="hidden md:flex items-center gap-3 text-sm hover:text-primary transition-colors">
                   <User className="h-5 w-5" />
@@ -91,7 +97,7 @@ function Header() {
                   로그아웃
                 </Button>
               </>
-            ) : !loading && (
+            ) : (
               <Link href="/login">
                 <Button variant="outline" size="sm" className="text-sm h-10 px-4">
                   로그인

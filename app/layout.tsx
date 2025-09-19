@@ -2,6 +2,7 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Suspense } from "react"
 import "./globals.css"
+import AuthProvider from "@/components/auth-provider"
 
 export const metadata: Metadata = {
   title: "군산중고등학교 총동창회",
@@ -17,7 +18,9 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className="font-sans min-h-screen bg-background">
-        <Suspense fallback={null}>{children}</Suspense>
+        <AuthProvider>
+          <Suspense fallback={null}>{children}</Suspense>
+        </AuthProvider>
       </body>
     </html>
   )

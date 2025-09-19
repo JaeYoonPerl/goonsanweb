@@ -1,4 +1,4 @@
-import { GraduationCap } from "lucide-react"
+import Image from "next/image"
 
 export function Footer() {
   return (
@@ -7,7 +7,13 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <GraduationCap className="h-5 w-5 text-primary" />
+              <Image 
+                src="/goonsanChong.webp" 
+                alt="군산중고등학교 로고" 
+                width={20} 
+                height={20} 
+                className="h-5 w-5"
+              />
               <h3 className="font-semibold text-foreground text-sm">군산중고등학교 총동창회</h3>
             </div>
             <p className="text-sm text-muted-foreground">

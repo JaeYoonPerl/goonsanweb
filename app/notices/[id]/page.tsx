@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { ArrowLeft, Eye, Calendar, User, Trash2, Edit, MessageCircle, Send, Heart, ChevronLeft, ChevronRight } from "lucide-react"
+import { ArrowLeft, Eye, Calendar, User, Trash2, Edit, MessageCircle, Send, Heart, ChevronLeft, ChevronRight, Pin, PinOff } from "lucide-react"
 import Link from "next/link"
 import { useParams, useRouter, usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -21,6 +21,7 @@ import { useAuth } from "@/hooks"
 import Header from "@/components/home/header"
 import { usePostNavigation } from "@/hooks"
 import { useComments } from "@/hooks"
+import { useDataStore } from "@/stores"
 
 // 기존 공지사항 더미 데이터
 const notices = [
@@ -252,6 +253,9 @@ export default function NoticeDetailPage() {
   // 댓글 관리
   const { comments, addComment } = useComments(parseInt(params.id as string), 'notice')
   const [newComment, setNewComment] = useState('')
+  
+  // 데이터 스토어
+  const { togglePinNotice } = useDataStore()
 
   useEffect(() => {
     const noticeId = parseInt(params.id as string)
@@ -360,6 +364,20 @@ export default function NoticeDetailPage() {
     }
 
     addComment(comment)
+    setNewComment('') // 입력창 초기화
+  }
+
+  const handleTogglePin = () => {
+    if (!isAdmin) {
+      alert("고정 권한이 없습니다.")
+      return
+    }
+
+    const noticeId = parseInt(params.id as string)
+    togglePinNotice(noticeId)
+    
+    // 현재 공지사항 상태 업데이트
+    setNotice((prev: any) => prev ? { ...prev, isPinned: !prev.isPinned } : null)
   }
 
   if (loading) {
@@ -412,6 +430,24 @@ export default function NoticeDetailPage() {
               </div>
               {isAdmin && (
                 <div className="flex gap-2">
+                  <Button 
+                    variant={notice.isPinned ? "default" : "outline"} 
+                    size="lg" 
+                    onClick={handleTogglePin}
+                    className="gap-2 text-base"
+                  >
+                    {notice.isPinned ? (
+                      <>
+                        <PinOff className="h-5 w-5" />
+                        고정 해제
+                      </>
+                    ) : (
+                      <>
+                        <Pin className="h-5 w-5" />
+                        고정
+                      </>
+                    )}
+                  </Button>
                   <Button 
                     variant="outline" 
                     size="lg" 
@@ -474,30 +510,36 @@ export default function NoticeDetailPage() {
 
               {/* 댓글 작성 폼 */}
               {isLoggedIn ? (
-                <div className="mb-8 p-4 bg-muted/30 rounded-lg">
-                  <div className="flex items-center gap-2 mb-3">
-                    <User className="h-4 w-4" />
-                    <span className="text-sm font-medium">{user?.name} ({user?.grade})</span>
+                <div className="mb-8 p-6 bg-card border border-border rounded-lg shadow-sm">
+                  <div className="flex items-center gap-2 mb-4">
+                    <User className="h-5 w-5 text-primary" />
+                    <span className="text-base font-semibold">{user?.name} ({user?.grade})</span>
                   </div>
                   <Textarea
                     placeholder="댓글을 작성해주세요..."
                     value={newComment}
                     onChange={(e) => setNewComment(e.target.value)}
-                    className="mb-3 text-base"
-                    rows={3}
+                    className="mb-4 text-base min-h-[100px] resize-none"
+                    rows={4}
                   />
                   <div className="flex justify-end">
-                    <Button onClick={handleAddComment} className="gap-2 text-base">
+                    <Button 
+                      onClick={handleAddComment} 
+                      className="gap-2 text-base px-6 py-2"
+                      disabled={!newComment.trim()}
+                    >
                       <Send className="h-4 w-4" />
                       댓글 작성
                     </Button>
                   </div>
                 </div>
               ) : (
-                <div className="mb-8 p-4 bg-muted/30 rounded-lg text-center">
-                  <p className="text-muted-foreground mb-3">댓글을 작성하려면 로그인이 필요합니다.</p>
+                <div className="mb-8 p-6 bg-muted/50 border border-border rounded-lg text-center">
+                  <MessageCircle className="h-8 w-8 mx-auto mb-3 text-muted-foreground" />
+                  <p className="text-muted-foreground mb-4 text-base">댓글을 작성하려면 로그인이 필요합니다.</p>
                   <Link href="/login">
-                    <Button variant="outline" size="sm">
+                    <Button variant="outline" size="lg" className="gap-2">
+                      <User className="h-4 w-4" />
                       로그인
                     </Button>
                   </Link>
