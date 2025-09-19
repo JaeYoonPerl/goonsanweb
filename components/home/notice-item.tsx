@@ -6,10 +6,11 @@
  */
 import { memo } from "react"
 import { Badge } from "@/components/ui/badge"
-import { Eye, Heart, MessageCircle, Pin, Star, Bookmark } from "lucide-react"
+import { Eye, Heart } from "lucide-react"
 import Link from "next/link"
 import { stripHtml } from "@/lib/utils"
 import { Notice } from "@/lib/data"
+import { PinnedBadge } from "@/components/common/pinned-badge"
 
 interface NoticeItemProps {
   notice: Notice
@@ -33,12 +34,7 @@ export const NoticeItem = memo(function NoticeItem({ notice }: NoticeItemProps) 
             <Link href={`/notices/${notice.id}`}>
               <h4 className="text-2xl font-medium text-foreground hover:text-primary cursor-pointer flex items-center gap-2">
                 {notice.title}
-                {notice.isPinned && (
-                  <div className="flex items-center gap-1 bg-primary/10 px-2 py-1 rounded-full">
-                    <Star className="h-4 w-4 text-primary fill-primary" />
-                    <span className="text-xs font-medium text-primary">고정</span>
-                  </div>
-                )}
+                {notice.isPinned && <PinnedBadge />}
               </h4>
             </Link>
           </div>

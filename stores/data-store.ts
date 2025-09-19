@@ -125,12 +125,18 @@ export const useDataStore = create<DataStore>()(
           )
         }))
         
-        // localStorage의 임시 데이터도 업데이트
-        const tempNotices = JSON.parse(localStorage.getItem("tempNotices") || "[]")
-        const updatedTempNotices = tempNotices.map((notice: any) =>
-          notice.id === id ? { ...notice, isPinned: !notice.isPinned } : notice
-        )
-        localStorage.setItem("tempNotices", JSON.stringify(updatedTempNotices))
+        // localStorage의 임시 데이터도 업데이트 (클라이언트 사이드에서만)
+        if (typeof window !== 'undefined') {
+          try {
+            const tempNotices = JSON.parse(localStorage.getItem("tempNotices") || "[]")
+            const updatedTempNotices = tempNotices.map((notice: any) =>
+              notice.id === id ? { ...notice, isPinned: !notice.isPinned } : notice
+            )
+            localStorage.setItem("tempNotices", JSON.stringify(updatedTempNotices))
+          } catch (error) {
+            console.error("Failed to update temp notices:", error)
+          }
+        }
       },
 
       // 게시글 액션들
@@ -172,12 +178,18 @@ export const useDataStore = create<DataStore>()(
           )
         }))
         
-        // localStorage의 임시 데이터도 업데이트
-        const tempPosts = JSON.parse(localStorage.getItem("tempPosts") || "[]")
-        const updatedTempPosts = tempPosts.map((post: any) =>
-          post.id === id ? { ...post, isPinned: !post.isPinned } : post
-        )
-        localStorage.setItem("tempPosts", JSON.stringify(updatedTempPosts))
+        // localStorage의 임시 데이터도 업데이트 (클라이언트 사이드에서만)
+        if (typeof window !== 'undefined') {
+          try {
+            const tempPosts = JSON.parse(localStorage.getItem("tempPosts") || "[]")
+            const updatedTempPosts = tempPosts.map((post: any) =>
+              post.id === id ? { ...post, isPinned: !post.isPinned } : post
+            )
+            localStorage.setItem("tempPosts", JSON.stringify(updatedTempPosts))
+          } catch (error) {
+            console.error("Failed to update temp posts:", error)
+          }
+        }
       },
 
       // 댓글 액션들
