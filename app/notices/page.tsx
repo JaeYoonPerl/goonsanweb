@@ -125,6 +125,9 @@ export default function NoticesPage() {
         <Header />
 
         <main className="container mx-auto px-4 py-8">
+          {/* 상단 여백 */}
+          <div className="h-8"></div>
+          
           <SearchSection
             searchTerm={searchTerm}
             onSearchChange={handleSearch}

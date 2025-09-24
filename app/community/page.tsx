@@ -87,6 +87,9 @@ export default function CommunityPage() {
         <Header />
 
       <main className="container mx-auto px-4 py-8">
+        {/* 상단 여백 */}
+        <div className="h-8"></div>
+        
         {/* Search and Categories */}
         <Card className="mb-6">
           <CardContent className="p-6">

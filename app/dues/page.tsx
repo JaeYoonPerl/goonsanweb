@@ -92,11 +92,13 @@ export default function DuesPaymentPage() {
         <div className="h-16"></div>
         
         {/* 페이지 제목 */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-foreground mb-4">회비 납부</h1>
-          <p className="text-xl text-muted-foreground">군산고등학교 동문회 회비 납부</p>
-          <p className="text-base text-muted-foreground mt-2">지역과 금액을 선택해주세요.</p>
-        </div>
+        <Card className="mb-8">
+          <CardContent className="p-8 text-center">
+            <h1 className="text-4xl font-bold text-foreground mb-4">회비 납부</h1>
+            <p className="text-xl text-muted-foreground">군산고등학교 동문회 회비 납부</p>
+            <p className="text-base text-muted-foreground mt-2">지역과 금액을 선택해주세요.</p>
+          </CardContent>
+        </Card>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* 왼쪽: 현재 결제 상태 및 정보 */}
