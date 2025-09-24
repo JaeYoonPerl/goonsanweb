@@ -18,6 +18,7 @@ import Link from "next/link"
 import { useState, useEffect, useMemo, useCallback } from "react"
 import { useAuth } from "@/hooks"
 import Header from "@/components/home/header"
+import { Footer } from "@/components/home/footer"
 
 interface Member {
   id: number
@@ -348,6 +349,9 @@ export default function MembersPage() {
           </Card>
         </div>
       </main>
+      
+      {/* Footer */}
+      <Footer />
     </div>
   )
 }

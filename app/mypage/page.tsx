@@ -16,6 +16,7 @@ import Link from "next/link"
 import { useState, useEffect, useMemo, useCallback } from "react"
 import { useAuth } from "@/hooks"
 import Header from "@/components/home/header"
+import { Footer } from "@/components/home/footer"
 import { stripHtml } from "@/lib/utils"
 import { postStorage, noticeStorage, commentStorage, CommunityPost, Notice, Comment } from "@/lib"
 
@@ -366,6 +367,9 @@ export default function MyPage() {
           </Tabs>
         </div>
       </main>
+      
+      {/* Footer */}
+      <Footer />
     </div>
   )
 }

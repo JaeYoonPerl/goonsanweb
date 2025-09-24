@@ -67,6 +67,11 @@ function Header() {
             <a href="/community" className="text-foreground hover:text-primary transition-colors text-lg font-medium py-2 px-3">
               동문 커뮤니티
             </a>
+            {!loading && isLoggedIn && (
+              <a href="/dues" className="text-foreground hover:text-primary transition-colors text-lg font-medium py-2 px-3">
+                회비납부
+              </a>
+            )}
             {!loading && isLoggedIn && isAdmin && (
               <a href="/members" className="text-foreground hover:text-primary transition-colors text-lg font-medium py-2 px-3">
                 회원목록

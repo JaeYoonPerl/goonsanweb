@@ -16,6 +16,7 @@ import Link from "next/link"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import Header from "@/components/home/header"
+import { Footer } from "@/components/home/footer"
 
 interface SignupForm {
   email: string
@@ -322,6 +323,9 @@ export default function SignupPage() {
           </Card>
         </div>
       </main>
+      
+      {/* Footer */}
+      <Footer />
     </div>
   )
 }

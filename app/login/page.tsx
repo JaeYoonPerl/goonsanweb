@@ -15,6 +15,7 @@ import Link from "next/link"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { useAuth } from "@/hooks"
+import { Footer } from "@/components/home/footer"
 
 
 export default function LoginPage() {
@@ -134,6 +135,9 @@ export default function LoginPage() {
           </div>
         </CardContent>
       </Card>
+      
+      {/* Footer */}
+      <Footer />
     </div>
   )
 }

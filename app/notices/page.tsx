@@ -16,6 +16,7 @@ import { useState, useEffect, useCallback, useMemo } from "react"
 import { useAuth } from "@/hooks"
 import { stripHtml, hasImage } from "@/lib/utils"
 import Header from "@/components/home/header"
+import { Footer } from "@/components/home/footer"
 import { NOTICES } from "@/lib/data"
 import { BackgroundDecorations } from "@/components/common/background-decorations"
 import { SearchSection } from "@/components/common/search-section"
@@ -255,6 +256,9 @@ export default function NoticesPage() {
           </CardContent>
         </Card>
       </main>
+      
+      {/* Footer */}
+      <Footer />
       </div>
     </div>
   )

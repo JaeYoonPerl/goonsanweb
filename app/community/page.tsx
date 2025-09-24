@@ -17,6 +17,7 @@ import { useState, useEffect, useCallback, useMemo } from "react"
 import { useAuth } from "@/hooks"
 import { stripHtml, hasImage } from "@/lib/utils"
 import Header from "@/components/home/header"
+import { Footer } from "@/components/home/footer"
 import { POSTS } from "@/lib/data"
 import { BackgroundDecorations } from "@/components/common/background-decorations"
 import { COMMUNITY_CATEGORIES, PAGINATION_CONFIG, postStorage, CommunityPost, CommunityCategory } from "@/lib"
@@ -233,6 +234,9 @@ export default function CommunityPage() {
           </CardContent>
         </Card>
       </main>
+      
+      {/* Footer */}
+      <Footer />
       </div>
     </div>
   )

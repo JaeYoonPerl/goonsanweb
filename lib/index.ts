@@ -22,6 +22,7 @@ export * from './error-handler'
 
 // 유틸리티 함수
 export * from './utils'
+export * from './performance'
 
 // 데이터 (중복 제거)
 export {
