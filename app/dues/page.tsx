@@ -11,12 +11,13 @@ import { Separator } from "@/components/ui/separator"
 import { Badge } from "@/components/ui/badge"
 import { ArrowLeft, CreditCard, Banknote, Smartphone, Calendar, User, AlertCircle, CheckCircle, Info, X } from "lucide-react"
 import Link from "next/link"
-import { useState } from "react"
+import { useState, useCallback, useMemo, memo } from "react"
 import { useAuth } from "@/hooks"
 import Header from "@/components/home/header"
 import { Footer } from "@/components/home/footer"
+import { BackgroundDecorations } from "@/components/common/background-decorations"
 
-export default function DuesPaymentPage() {
+function DuesPaymentPage() {
   // 지역 선택 (재경/군산)
   const [selectedRegion, setSelectedRegion] = useState("재경")
   
@@ -37,28 +38,28 @@ export default function DuesPaymentPage() {
   const [isLoading, setIsLoading] = useState(false)
   const { user } = useAuth()
 
-  // 회비 금액 옵션
-  const amountOptions = [
+  // 회비 금액 옵션 - 메모이제이션
+  const amountOptions = useMemo(() => [
     { value: "50000", label: "5만원" },
     { value: "100000", label: "10만원" },
     { value: "150000", label: "15만원" },
     { value: "200000", label: "20만원" },
     { value: "300000", label: "30만원" },
-  ]
+  ], [])
 
-  // 지역 옵션
-  const regionOptions = [
+  // 지역 옵션 - 메모이제이션
+  const regionOptions = useMemo(() => [
     { value: "재경", label: "재경" },
     { value: "군산", label: "군산" },
-  ]
+  ], [])
 
-  // 결제 방식 옵션
-  const paymentTypeOptions = [
+  // 결제 방식 옵션 - 메모이제이션
+  const paymentTypeOptions = useMemo(() => [
     { value: "일회성", label: "일회성 결제" },
     { value: "정기결제", label: "매월 정기결제" },
-  ]
+  ], [])
 
-  const handleSubmit = async () => {
+  const handleSubmit = useCallback(async () => {
     if (!selectedRegion || !selectedAmount || !paymentType) {
       alert("모든 필수 항목을 선택해주세요.")
       return
@@ -71,23 +72,41 @@ export default function DuesPaymentPage() {
       alert(`${amountOptions.find(opt => opt.value === selectedAmount)?.label} 결제가 완료되었습니다.`)
       setIsLoading(false)
     }, 2000)
-  }
+  }, [selectedRegion, selectedAmount, paymentType, amountOptions])
 
-  const handleCancelPayment = () => {
+  const handleCancelPayment = useCallback(() => {
     if (confirm("정말로 결제를 해제하시겠습니까?")) {
       setCurrentPayment(prev => ({ ...prev, isActive: false }))
       alert("결제가 해제되었습니다.")
     }
-  }
+  }, [])
 
-  const selectedAmountInfo = amountOptions.find(opt => opt.value === selectedAmount)
+  const selectedAmountInfo = useMemo(() => 
+    amountOptions.find(opt => opt.value === selectedAmount),
+    [amountOptions, selectedAmount]
+  )
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <Header />
+    <div className="min-h-screen relative overflow-hidden">
+      {/* 메인 배경 - 더 화려한 그라데이션 */}
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-100 via-indigo-100 to-purple-100 animate-gradient-shift"></div>
+      
+      {/* 추가 배경 레이어들 - 더 화려하게 */}
+      <div className="absolute inset-0 bg-gradient-to-tr from-cyan-100/60 via-transparent to-pink-100/60"></div>
+      <div className="absolute inset-0 bg-gradient-to-bl from-emerald-100/40 via-transparent to-blue-100/40"></div>
+      <div className="absolute inset-0 bg-gradient-to-tl from-violet-100/30 via-transparent to-teal-100/30"></div>
+      
+      {/* 미묘한 패턴 오버레이 */}
+      <div className="absolute inset-0 opacity-5" style={{
+        backgroundImage: `url(\"data:image/svg+xml,%3Csvg width=\'100\' height=\'100\' viewBox=\'0 0 100 100\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%23000000\' fill-opacity=\'0.1\'%3E%3Cpath d=\'M50 0L60 40L100 50L60 60L50 100L40 60L0 50L40 40Z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")`
+      }}></div>
+      
+      <BackgroundDecorations />
+      <div className="relative z-10">
+        {/* Header */}
+        <Header />
 
-      <main className="container mx-auto px-6 py-12 max-w-6xl">
+        <main className="container mx-auto px-6 py-12 max-w-6xl">
         {/* 상단 여백 */}
         <div className="h-16"></div>
         
@@ -274,10 +293,13 @@ export default function DuesPaymentPage() {
         
         {/* 하단 여백 */}
         <div className="h-16"></div>
-      </main>
-      
-      {/* Footer */}
-      <Footer />
+        </main>
+        
+        {/* Footer */}
+        <Footer />
+      </div>
     </div>
   )
 }
+
+export default memo(DuesPaymentPage)

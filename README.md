@@ -11,6 +11,8 @@
 - **아이콘**: Lucide React
 - **폼 관리**: React Hook Form + Zod
 - **차트**: Recharts
+- **성능 최적화**: React.memo, useCallback, useMemo
+- **애니메이션**: CSS Keyframes, Tailwind CSS 애니메이션
 
 ## 📁 프로젝트 구조 (상세 설명)
 
@@ -225,6 +227,28 @@ export default function NoticeDetailPage({
 3. **확장성**: 새로운 기능 추가 시 구조를 유지하면서 확장 가능
 4. **유지보수**: 각 파일의 역할이 명확해서 수정이 용이
 5. **Next.js 표준**: App Router의 권장 구조를 따름
+
+## 🎨 시각적 특징
+
+### 🌈 **화려한 배경 디자인**
+- **다층 그라데이션**: 4개의 그라데이션 레이어로 깊이감 연출
+- **동적 애니메이션**: CSS Keyframes를 활용한 부드러운 움직임
+- **SVG 패턴**: 점, 기하학적 도형, 별 패턴으로 텍스처 추가
+- **부유하는 원형 요소**: 13개의 다양한 크기와 색상의 원형 그라데이션
+- **빛 효과**: 4개의 펄스 애니메이션이 적용된 빛 효과
+- **반짝이는 오버레이**: 3개의 shimmer 애니메이션으로 생동감 추가
+
+### 🎯 **색상 팔레트**
+- **메인 색상**: Blue, Indigo, Purple 계열
+- **포인트 색상**: Cyan, Pink, Emerald, Violet, Teal
+- **강조 색상**: Rose, Amber, Fuchsia, Yellow
+- **투명도**: 20%~50% 범위로 자연스러운 블렌딩
+
+### ⚡ **성능 최적화**
+- **React.memo**: 컴포넌트 리렌더링 최적화
+- **useCallback**: 이벤트 핸들러 메모이제이션
+- **useMemo**: 계산 비용이 높은 값들 캐싱
+- **SVG 패턴 메모이제이션**: 배경 패턴 재생성 방지
 
 ## 🚀 시작하기
 
@@ -715,8 +739,21 @@ touch components/new-component.tsx
 - 새로운 컴포넌트는 성능을 고려하여 작성합니다
 - 불필요한 리렌더링을 방지합니다
 - 메모리 누수를 방지합니다
+- React.memo, useCallback, useMemo를 적극 활용합니다
+
+### 시각적 디자인
+- 화려하고 역동적인 배경 디자인을 유지합니다
+- 다층 그라데이션과 애니메이션 효과를 활용합니다
+- SVG 패턴과 부유하는 원형 요소로 시각적 풍부함을 제공합니다
 
 ## 📊 프로젝트 상태
+
+### 🎨 **최신 업데이트 (2024.12)**
+- ✅ **화려한 배경 디자인**: 13개의 부유하는 원형 요소와 4개의 빛 효과
+- ✅ **성능 최적화**: React.memo, useCallback, useMemo 적용
+- ✅ **다층 그라데이션**: 4개의 그라데이션 레이어로 깊이감 연출
+- ✅ **SVG 패턴**: 점, 기하학적 도형, 별 패턴으로 텍스처 추가
+- ✅ **동적 애니메이션**: CSS Keyframes를 활용한 부드러운 움직임
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/your-username/goonsanweb)
 ![GitHub issues](https://img.shields.io/github/issues/your-username/goonsanweb)

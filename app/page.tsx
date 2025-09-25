@@ -45,12 +45,13 @@ function HomePage() {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
-      {/* 메인 배경 - 더 풍부한 그라데이션 */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 animate-gradient-shift"></div>
+      {/* 메인 배경 - 더 화려한 그라데이션 */}
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-100 via-indigo-100 to-purple-100 animate-gradient-shift"></div>
       
-      {/* 추가 배경 레이어들 */}
-      <div className="absolute inset-0 bg-gradient-to-tr from-cyan-50/50 via-transparent to-pink-50/50"></div>
-      <div className="absolute inset-0 bg-gradient-to-bl from-emerald-50/30 via-transparent to-blue-50/30"></div>
+      {/* 추가 배경 레이어들 - 더 화려하게 */}
+      <div className="absolute inset-0 bg-gradient-to-tr from-cyan-100/60 via-transparent to-pink-100/60"></div>
+      <div className="absolute inset-0 bg-gradient-to-bl from-emerald-100/40 via-transparent to-blue-100/40"></div>
+      <div className="absolute inset-0 bg-gradient-to-tl from-violet-100/30 via-transparent to-teal-100/30"></div>
       
       {/* 미묘한 패턴 오버레이 */}
       <div className="absolute inset-0 opacity-5" style={{

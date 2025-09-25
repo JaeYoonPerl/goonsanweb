@@ -16,7 +16,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { ArrowLeft, Eye, Heart, MessageCircle, User, Send, Trash2, Edit, ChevronLeft, ChevronRight, Pin, PinOff } from "lucide-react"
 import Link from "next/link"
 import { useParams, useRouter, usePathname } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback, useMemo, memo } from "react"
 import { useAuth } from "@/hooks"
 import Header from "@/components/home/header"
 import { usePostNavigation } from "@/hooks"
@@ -463,7 +463,7 @@ const posts = [
   },
 ]
 
-export default function CommunityDetailPage() {
+function CommunityDetailPage() {
   const params = useParams()
   const router = useRouter()
   const pathname = usePathname()
@@ -483,8 +483,18 @@ export default function CommunityDetailPage() {
   // 데이터 스토어
   const { togglePinPost } = useDataStore()
 
+  // 메모이제이션된 값들
+  const postId = useMemo(() => parseInt(params.id as string), [params.id])
+  const isOwner = useMemo(() => 
+    isLoggedIn && post && user && post.author === user.name && post.grade === user.grade, 
+    [isLoggedIn, post, user]
+  )
+  const canEdit = useMemo(() => 
+    isAdmin || (isOwner && isTempPost), 
+    [isAdmin, isOwner, isTempPost]
+  )
+
   useEffect(() => {
-    const postId = parseInt(params.id as string)
     
     // 임시 저장된 게시글들 로드
     const tempPosts = JSON.parse(localStorage.getItem("tempPosts") || "[]")
@@ -528,18 +538,18 @@ export default function CommunityDetailPage() {
       setIsTempPost(isTemp)
     }
     setLoading(false)
-  }, [params.id])
+  }, [postId])
 
-  const handleLike = () => {
+  const handleLike = useCallback(() => {
     if (!isLoggedIn) {
       alert("로그인이 필요합니다.")
       return
     }
     setIsLiked(!isLiked)
     // 실제로는 API 호출하여 좋아요 처리
-  }
+  }, [isLoggedIn, isLiked])
 
-  const handleComment = () => {
+  const handleComment = useCallback(() => {
     if (!isLoggedIn) {
       alert("로그인이 필요합니다.")
       return
@@ -555,24 +565,21 @@ export default function CommunityDetailPage() {
       grade: user?.grade || "학번",
       content: newComment.trim(),
       date: new Date().toLocaleDateString("ko-KR"),
-      postId: parseInt(params.id as string),
+      postId: postId,
       postType: 'post' as const
     }
     
     addComment(comment)
-  }
+    setNewComment('')
+  }, [isLoggedIn, newComment, user, postId, addComment])
 
-  const handleDelete = () => {
-    const isOwner = isLoggedIn && post && user && post.author === user.name && post.grade === user.grade
-    const canDelete = isAdmin || (isOwner && isTempPost)
-    if (!canDelete) {
+  const handleDelete = useCallback(() => {
+    if (!canEdit) {
       alert("삭제 권한이 없습니다.")
       return
     }
 
     if (confirm("정말로 이 게시글을 삭제하시겠습니까?")) {
-      const postId = parseInt(params.id as string)
-      
       // 임시 저장된 게시글에서 삭제
       const tempPosts = JSON.parse(localStorage.getItem("tempPosts") || "[]")
       const updatedTempPosts = tempPosts.filter((p: any) => p.id !== postId)
@@ -581,11 +588,9 @@ export default function CommunityDetailPage() {
       alert("게시글이 삭제되었습니다.")
       router.push("/community")
     }
-  }
+  }, [canEdit, postId, router])
 
-  const handleEdit = () => {
-    const isOwner = isLoggedIn && post && user && post.author === user.name && post.grade === user.grade
-    const canEdit = isAdmin || (isOwner && isTempPost)
+  const handleEdit = useCallback(() => {
     if (!canEdit) {
       alert("수정 권한이 없습니다.")
       return
@@ -601,39 +606,40 @@ export default function CommunityDetailPage() {
     
     // 수정할 데이터를 localStorage에 임시 저장
     localStorage.setItem("editPostData", JSON.stringify(editData))
-    router.push(`/community/edit/${params.id}`)
-  }
+    router.push(`/community/edit/${postId}`)
+  }, [canEdit, post, postId, router])
 
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <p className="text-lg text-muted-foreground">로딩 중...</p>
+  // 로딩 및 에러 상태를 메모이제이션
+  const loadingState = useMemo(() => (
+    <div className="min-h-screen bg-background flex items-center justify-center">
+      <p className="text-lg text-muted-foreground">로딩 중...</p>
+    </div>
+  ), [])
+
+  const errorState = useMemo(() => (
+    <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="text-center">
+        <p className="text-lg text-muted-foreground mb-4">게시글을 찾을 수 없습니다.</p>
+        <Link href="/community">
+          <Button>목록으로 돌아가기</Button>
+        </Link>
       </div>
-    )
-  }
+    </div>
+  ), [])
 
-  if (!post) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-lg text-muted-foreground mb-4">게시글을 찾을 수 없습니다.</p>
-          <Link href="/community">
-            <Button>목록으로 돌아가기</Button>
-          </Link>
-        </div>
-      </div>
-    )
-  }
+  if (loading) return loadingState
+  if (!post) return errorState
 
   return (
     <div className="min-h-screen relative overflow-hidden">
-      {/* 메인 배경 - 더 풍부한 그라데이션 */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 animate-gradient-shift"></div>
+      {/* 메인 배경 - 더 화려한 그라데이션 */}
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-100 via-indigo-100 to-purple-100 animate-gradient-shift"></div>
       
-      {/* 추가 배경 레이어들 */}
-      <div className="absolute inset-0 bg-gradient-to-tr from-cyan-50/50 via-transparent to-pink-50/50"></div>
-      <div className="absolute inset-0 bg-gradient-to-bl from-emerald-50/30 via-transparent to-blue-50/30"></div>
+      {/* 추가 배경 레이어들 - 더 화려하게 */}
+      <div className="absolute inset-0 bg-gradient-to-tr from-cyan-100/60 via-transparent to-pink-100/60"></div>
+      <div className="absolute inset-0 bg-gradient-to-bl from-emerald-100/40 via-transparent to-blue-100/40"></div>
+      <div className="absolute inset-0 bg-gradient-to-tl from-violet-100/30 via-transparent to-teal-100/30"></div>
       
       {/* 미묘한 패턴 오버레이 */}
       <div className="absolute inset-0 opacity-5" style={{
@@ -866,3 +872,5 @@ export default function CommunityDetailPage() {
     </div>
   )
 }
+
+export default memo(CommunityDetailPage)

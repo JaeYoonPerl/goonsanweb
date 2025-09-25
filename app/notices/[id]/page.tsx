@@ -16,7 +16,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { ArrowLeft, Eye, Calendar, User, Trash2, Edit, MessageCircle, Send, Heart, ChevronLeft, ChevronRight, Pin, PinOff } from "lucide-react"
 import Link from "next/link"
 import { useParams, useRouter, usePathname } from "next/navigation"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback, useMemo, memo } from "react"
 import { useAuth } from "@/hooks"
 import Header from "@/components/home/header"
 import { usePostNavigation } from "@/hooks"
@@ -241,7 +241,7 @@ const notices = [
   },
 ]
 
-export default function NoticeDetailPage() {
+function NoticeDetailPage() {
   const params = useParams()
   const router = useRouter()
   const pathname = usePathname()
@@ -259,8 +259,14 @@ export default function NoticeDetailPage() {
   // 데이터 스토어
   const { togglePinNotice } = useDataStore()
 
+  // 메모이제이션된 값들
+  const noticeId = useMemo(() => parseInt(params.id as string), [params.id])
+  const isOwner = useMemo(() => 
+    isLoggedIn && notice && user && notice.author === user.name, 
+    [isLoggedIn, notice, user]
+  )
+
   useEffect(() => {
-    const noticeId = parseInt(params.id as string)
     
     // 임시 저장된 공지사항들 로드
     const tempNotices = JSON.parse(localStorage.getItem("tempNotices") || "[]")
@@ -300,17 +306,15 @@ export default function NoticeDetailPage() {
       }
     }
     setLoading(false)
-  }, [params.id])
+  }, [noticeId])
 
-  const handleDelete = () => {
+  const handleDelete = useCallback(() => {
     if (!isAdmin) {
       alert("삭제 권한이 없습니다.")
       return
     }
 
     if (confirm("정말로 이 공지사항을 삭제하시겠습니까?")) {
-      const noticeId = parseInt(params.id as string)
-      
       // 임시 저장된 공지사항에서 삭제
       const tempNotices = JSON.parse(localStorage.getItem("tempNotices") || "[]")
       const updatedTempNotices = tempNotices.filter((n: any) => n.id !== noticeId)
@@ -319,9 +323,9 @@ export default function NoticeDetailPage() {
       alert("공지사항이 삭제되었습니다.")
       router.push("/notices")
     }
-  }
+  }, [isAdmin, noticeId, router])
 
-  const handleEdit = () => {
+  const handleEdit = useCallback(() => {
     if (!isAdmin) {
       alert("수정 권한이 없습니다.")
       return
@@ -338,11 +342,11 @@ export default function NoticeDetailPage() {
     
     // 수정할 데이터를 localStorage에 임시 저장
     localStorage.setItem("editNoticeData", JSON.stringify(editData))
-    router.push(`/notices/edit/${params.id}`)
-  }
+    router.push(`/notices/edit/${noticeId}`)
+  }, [isAdmin, notice, noticeId, router])
 
 
-  const handleAddComment = () => {
+  const handleAddComment = useCallback(() => {
     if (!isLoggedIn) {
       alert("댓글을 작성하려면 로그인이 필요합니다.")
       return
@@ -361,56 +365,56 @@ export default function NoticeDetailPage() {
       grade: user.grade,
       content: newComment.trim(),
       date: new Date().toLocaleDateString("ko-KR"),
-      postId: parseInt(params.id as string),
+      postId: noticeId,
       postType: 'notice' as const
     }
 
     addComment(comment)
     setNewComment('') // 입력창 초기화
-  }
+  }, [isLoggedIn, newComment, user, noticeId, addComment])
 
-  const handleTogglePin = () => {
+  const handleTogglePin = useCallback(() => {
     if (!isAdmin) {
       alert("고정 권한이 없습니다.")
       return
     }
 
-    const noticeId = parseInt(params.id as string)
     togglePinNotice(noticeId)
     
     // 현재 공지사항 상태 업데이트
     setNotice((prev: any) => prev ? { ...prev, isPinned: !prev.isPinned } : null)
-  }
+  }, [isAdmin, noticeId, togglePinNotice])
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <p className="text-lg text-muted-foreground">로딩 중...</p>
-      </div>
-    )
-  }
+  // 로딩 및 에러 상태를 메모이제이션
+  const loadingState = useMemo(() => (
+    <div className="min-h-screen bg-background flex items-center justify-center">
+      <p className="text-lg text-muted-foreground">로딩 중...</p>
+    </div>
+  ), [])
 
-  if (!notice) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-lg text-muted-foreground mb-4">공지사항을 찾을 수 없습니다.</p>
-          <Link href="/notices">
-            <Button>목록으로 돌아가기</Button>
-          </Link>
-        </div>
+  const errorState = useMemo(() => (
+    <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="text-center">
+        <p className="text-lg text-muted-foreground mb-4">공지사항을 찾을 수 없습니다.</p>
+        <Link href="/notices">
+          <Button>목록으로 돌아가기</Button>
+        </Link>
       </div>
-    )
-  }
+    </div>
+  ), [])
+
+  if (loading) return loadingState
+  if (!notice) return errorState
 
   return (
     <div className="min-h-screen relative overflow-hidden">
-      {/* 메인 배경 - 더 풍부한 그라데이션 */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 animate-gradient-shift"></div>
+      {/* 메인 배경 - 더 화려한 그라데이션 */}
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-100 via-indigo-100 to-purple-100 animate-gradient-shift"></div>
       
-      {/* 추가 배경 레이어들 */}
-      <div className="absolute inset-0 bg-gradient-to-tr from-cyan-50/50 via-transparent to-pink-50/50"></div>
-      <div className="absolute inset-0 bg-gradient-to-bl from-emerald-50/30 via-transparent to-blue-50/30"></div>
+      {/* 추가 배경 레이어들 - 더 화려하게 */}
+      <div className="absolute inset-0 bg-gradient-to-tr from-cyan-100/60 via-transparent to-pink-100/60"></div>
+      <div className="absolute inset-0 bg-gradient-to-bl from-emerald-100/40 via-transparent to-blue-100/40"></div>
+      <div className="absolute inset-0 bg-gradient-to-tl from-violet-100/30 via-transparent to-teal-100/30"></div>
       
       {/* 미묘한 패턴 오버레이 */}
       <div className="absolute inset-0 opacity-5" style={{
@@ -661,3 +665,5 @@ export default function NoticeDetailPage() {
     </div>
   )
 }
+
+export default memo(NoticeDetailPage)
