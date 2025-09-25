@@ -22,6 +22,8 @@ import Header from "@/components/home/header"
 import { usePostNavigation } from "@/hooks"
 import { useComments } from "@/hooks"
 import { useDataStore } from "@/stores"
+import { Footer } from "@/components/home/footer"
+import { BackgroundDecorations } from "@/components/common/background-decorations"
 
 // 기존 공지사항 더미 데이터
 const notices = [
@@ -402,12 +404,26 @@ export default function NoticeDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <Header />
+    <div className="min-h-screen relative overflow-hidden">
+      {/* 메인 배경 - 더 풍부한 그라데이션 */}
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 animate-gradient-shift"></div>
+      
+      {/* 추가 배경 레이어들 */}
+      <div className="absolute inset-0 bg-gradient-to-tr from-cyan-50/50 via-transparent to-pink-50/50"></div>
+      <div className="absolute inset-0 bg-gradient-to-bl from-emerald-50/30 via-transparent to-blue-50/30"></div>
+      
+      {/* 미묘한 패턴 오버레이 */}
+      <div className="absolute inset-0 opacity-5" style={{
+        backgroundImage: `url(\"data:image/svg+xml,%3Csvg width=\'100\' height=\'100\' viewBox=\'0 0 100 100\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'%23000000\' fill-opacity=\'0.1\'%3E%3Cpath d=\'M50 0L60 40L100 50L60 60L50 100L40 60L0 50L40 40Z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\")`
+      }}></div>
+      
+      <BackgroundDecorations />
+      <div className="relative z-10">
+        {/* Header */}
+        <Header />
 
-      <main className="container mx-auto px-4 py-8">
-        <Card>
+        <main className="container mx-auto px-4 py-8">
+          <Card className="my-8">
           <CardHeader>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
@@ -638,7 +654,10 @@ export default function NoticeDetailPage() {
             </div>
           </CardContent>
         </Card>
-      </main>
+        </main>
+
+        <Footer />
+      </div>
     </div>
   )
 }

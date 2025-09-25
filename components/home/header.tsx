@@ -43,8 +43,10 @@ function Header() {
   }, [])
 
   return (
-    <header className="bg-card border-b border-border">
-      <div className="w-full px-4 py-4">
+    <header className="bg-card/80 backdrop-blur-sm border-b border-border/50 relative">
+      {/* 헤더 배경 효과 */}
+      <div className="absolute inset-0 bg-gradient-to-r from-blue-50/30 via-transparent to-purple-50/30"></div>
+      <div className="w-full px-4 py-4 relative z-10">
         <div className="flex items-center justify-between max-w-7xl mx-auto">
           <div 
             className="flex items-center gap-6 cursor-pointer hover:opacity-80 transition-opacity"
