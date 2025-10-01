@@ -115,6 +115,33 @@ export default function LoginPage() {
               {isLoading ? "로그인 중..." : "로그인"}
             </Button>
 
+            <div className="relative my-6">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-card px-2 text-muted-foreground">또는</span>
+              </div>
+            </div>
+
+            <Button
+              type="button"
+              className="w-full h-14 text-xl font-medium"
+              style={{ backgroundColor: '#FEE500', color: '#000000' }}
+              onClick={() => {
+                alert('카카오톡 로그인 기능은 준비 중입니다.')
+              }}
+            >
+              <svg 
+                className="mr-2 h-5 w-5" 
+                viewBox="0 0 208 191"
+                fill="currentColor"
+              >
+                <path d="M104,0C46.562,0,0,36.793,0,82.139c0,28.927,19.031,54.347,47.636,68.765c-2.13,7.802-13.681,48.878-13.951,52.013c-0.347,4.032,1.508,3.988,3.169,2.917c1.324-0.856,21.327-14.524,39.638-26.896c8.763,1.197,17.768,1.836,26.908,1.836c57.438,0,104-36.793,104-82.139S161.438,0,104,0"/>
+              </svg>
+              카카오 로그인
+            </Button>
+
             <div className="text-center text-sm text-muted-foreground">
               <p>계정이 없으신가요?</p>
               <Link href="/signup" className="text-primary hover:underline">
