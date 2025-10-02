@@ -15,15 +15,25 @@ export function AcademicCalendar() {
         <div
           key={i}
           className={`
-            p-3 text-center text-base min-h-[50px] border border-border/50
+            p-2 text-center text-base min-h-[60px] border border-border/50 relative
             ${!isCurrentMonth ? "text-muted-foreground/50" : "text-foreground"}
             ${isToday ? "bg-primary text-primary-foreground font-semibold" : ""}
             ${hasEvent ? "bg-accent" : ""}
           `}
         >
           <div className="font-medium">{isCurrentMonth ? date : date <= 0 ? 30 + date : date - 31}</div>
+          
+          {/* 테스트 경고 표시 - 모든 날짜에 표시 */}
+          {isCurrentMonth && (
+            <div className="absolute top-0 right-0 left-0 bottom-0 flex items-center justify-center">
+              <div className="bg-red-500 text-black text-xs font-bold px-1 py-0.5 rounded rotate-12 transform scale-75 opacity-80">
+                테스트
+              </div>
+            </div>
+          )}
+          
           {hasEvent && isCurrentMonth && (
-            <div className="text-sm mt-1">
+            <div className="text-sm mt-1 relative z-10">
               {date === 15 && (
                 <div className="bg-destructive text-destructive-foreground px-2 rounded text-xs">
                   총회
@@ -47,9 +57,6 @@ export function AcademicCalendar() {
         <CardTitle className="flex items-center gap-2 text-xl">
           <Calendar className="h-6 w-6 text-primary" />
           학사일정
-          <Badge variant="destructive" className="text-lg font-bold px-4 py-2 ml-4">
-            테스트 혹은 임시용
-          </Badge>
         </CardTitle>
       </CardHeader>
       <CardContent>
