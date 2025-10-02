@@ -47,6 +47,9 @@ export function AcademicCalendar() {
         <CardTitle className="flex items-center gap-2 text-xl">
           <Calendar className="h-6 w-6 text-primary" />
           학사일정
+          <Badge variant="destructive" className="text-lg font-bold px-4 py-2 ml-4">
+            테스트 혹은 임시용
+          </Badge>
         </CardTitle>
       </CardHeader>
       <CardContent>
